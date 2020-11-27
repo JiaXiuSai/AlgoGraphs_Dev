@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Education Graph Algorithm Tools</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- Nav Bar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+    <h1 class="navbar-brand">Education Graph Algorithm Tools</h1>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container" style="margin-left: 30px;">
+    <div class="row" style="padding-top: 30px;">
+      <div class="card" style="max-height: 400px;">
+        <article class="card-group-item">
+          <header class="card-header">
+            <h5 class="title">Options</h5>
+          </header>
+          <div class="filter-content">
+            <div class="card-body">
+              <form>
+                <div class="form-group">
+                  <label for="exampleFormControlSelect1">Type of Graph</label>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input">
+                    <label class="custom-control-label" for="customRadio1">Static graph</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input">
+                    <label class="custom-control-label" for="customRadio2">Dynamic graph</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="exampleFormControlSelect1">Algorithm</label>
+                  <select class="form-control" id="exampleFormControlSelect1">
+                    <option>None</option>
+                    <option>Shortest Path</option>
+                    <option>Minimum Spanning Tree</option>
+                    <option>Cycle Detection</option>
+                    <option>Breath-First Search</option>
+                    <option>Depth-First Search</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="exampleFormControlSelect1">Example Graphs</label>
+                  <select class="form-control" id="exampleFormControlSelect1">
+                    <option>None</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                    <option>Custom</option>
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-success">Complie</button>
+              </form>
+            </div>
+        </article> <!-- card-group-item.// -->
+      </div> <!-- card.// -->
+      <div class="col-sm">
+        <h3>Example graph</h3>
+        <img src="example_graph.png" alt="Graph">
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.slim.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
