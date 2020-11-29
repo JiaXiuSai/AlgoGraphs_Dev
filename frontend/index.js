@@ -22,3 +22,9 @@ inputForm.addEventListener('submit', function (event) {
         window.alert(error);
     }
 });
+
+const btnPlayPause = document.getElementById('btnPlayPause')
+const carousel = document.getElementById('carousel')
+btnPlayPause.addEventListener('click', function () {
+    alert("Carousel Pause");
+});
