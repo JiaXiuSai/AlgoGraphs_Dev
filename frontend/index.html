@@ -4,7 +4,7 @@
 <head>
 
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="">
   <meta name="author" content="">
 
@@ -14,20 +14,20 @@
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <!-- Custom core CSS -->
   <link href="index.css" rel="stylesheet">
-
 </head>
 
 <body>
   <!-- Nav Bar -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
-    <h1 class="navbar-brand" style="font-size: 40px;">Education Graph Algorithm Tools</h1>
+    <h1 class="navbar-brand" style="font-size: 20px;">Education Graph Algorithm Tools</h1>
   </nav>
 
   <!-- Page Content -->
-  <div class="container" style="margin-left: 30px;">
-    <div class="row" style="padding-top: 30px;">
+  <div class="container-fluid">
+    <!-- Graphs tab -->
+    <div class="row" style="padding: 20px;">
       <!-- Options tab -->
-      <div class="card" style="height: 510px;">
+      <div class="card col-2.5" style="padding: 0px; height: fit-content;">
         <article class="card-group-item">
           <header class="card-header">
             <h4 class="title">Options</h4>
@@ -111,55 +111,42 @@
               </form>
             </div>
         </article>
-      </div> <!-- Options tab// -->
+      </div><!-- Options tab// -->
       <!-- Graphs tab -->
-      <div class="col-sm" style="margin-left: 100px;">
-
-        <!-- The carousel -->
-        <div id="myCarousel" class="carousel mt-4">
-          <!-- The slideshow -->
-          <div class="carousel-inner">
-            <div class="carousel-item active">
-              <img src="Figure_1.png">
+      <div class="col-6" id="slideshow">
+        <div>
+          <img class="border border-dark rounded" name="slide" id="imgSlideshow" src="Figure_1.png">
+          <div style="display: flex; justify-content: center;"><h4 id="counter" style="padding-top:7px;"></h4></div>
+          <div style="display: flex; justify-content: center;">
+            <div style="padding: 10px;">
+              <button class="btn btn-secondary" type='button' id='prevBtn' onclick="return previousImage()">
+                <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-skip-forward" fill="currentColor">
+                  <path fill-rule="evenodd"
+                    d="M.5 3.5A.5.5 0 0 1 1 4v3.248l6.267-3.636c.52-.302 1.233.043 1.233.696v2.94l6.267-3.636c.52-.302 1.233.043 1.233.696v7.384c0 .653-.713.998-1.233.696L8.5 8.752v2.94c0 .653-.713.998-1.233.696L1 8.752V12a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5zm7 1.133L1.696 8 7.5 11.367V4.633zm7.5 0L9.196 8 15 11.367V4.633z" />
+                </svg>
+              </button>
             </div>
-            <div class="carousel-item">
-              <img src="Figure_2.png">
+            <div style="padding: 10px;">
+              <button class="btn btn-secondary" type='button' id='startCycle' onclick="return setTimer()">
+                <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-play" fill="currentColor">
+                  <path fill-rule="evenodd"
+                    d="M10.804 8L5 4.633v6.734L10.804 8zm.792-.696a.802.802 0 0 1 0 1.392l-6.363 3.692C4.713 12.69 4 12.345 4 11.692V4.308c0-.653.713-.998 1.233-.696l6.363 3.692z" />
+                </svg>
+              </button>
             </div>
-            <div class="carousel-item">
-              <img src="Figure_3.png">
-            </div>
-            <div class="carousel-item">
-              <img src="Figure_4.png">
+            <div style="padding: 10px;">
+              <button class="btn btn-secondary" type='button' id='nextBtn' onclick="return nextImage()">
+                <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-skip-forward" fill="currentColor">
+                  <path fill-rule="evenodd"
+                    d="M15.5 3.5a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V8.752l-6.267 3.636c-.52.302-1.233-.043-1.233-.696v-2.94l-6.267 3.636C.713 12.69 0 12.345 0 11.692V4.308c0-.653.713-.998 1.233-.696L7.5 7.248v-2.94c0-.653.713-.998 1.233-.696L15 7.248V4a.5.5 0 0 1 .5-.5zM1 4.633v6.734L6.804 8 1 4.633zm7.5 0v6.734L14.304 8 8.5 4.633z" />
+                </svg>
+              </button>
             </div>
           </div>
         </div>
-        <!-- Slideshow controls -->
-        <button class="btn btn-secondary carousel-control-prev shadow-none" type='button'
-          style="background-color: transparent; border: none;">
-          <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-skip-backward" fill="black">
-            <path fill-rule="evenodd"
-              d="M.5 3.5A.5.5 0 0 1 1 4v3.248l6.267-3.636c.52-.302 1.233.043 1.233.696v2.94l6.267-3.636c.52-.302 1.233.043 1.233.696v7.384c0 .653-.713.998-1.233.696L8.5 8.752v2.94c0 .653-.713.998-1.233.696L1 8.752V12a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5zm7 1.133L1.696 8 7.5 11.367V4.633zm7.5 0L9.196 8 15 11.367V4.633z" />
-          </svg>
-        </button>
-        <button class="btn btn-secondary carousel-control-next shadow-none" type='button'
-          style="background-color: transparent; border: none;">
-          <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-skip-forward" fill="black">
-            <path fill-rule="evenodd"
-              d="M15.5 3.5a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V8.752l-6.267 3.636c-.52.302-1.233-.043-1.233-.696v-2.94l-6.267 3.636C.713 12.69 0 12.345 0 11.692V4.308c0-.653.713-.998 1.233-.696L7.5 7.248v-2.94c0-.653.713-.998 1.233-.696L15 7.248V4a.5.5 0 0 1 .5-.5zM1 4.633v6.734L6.804 8 1 4.633zm7.5 0v6.734L14.304 8 8.5 4.633z" />
-          </svg>
-        </button>
-        <button class="btn btn-secondary" type='button' id='playPause'
-          style="display: block; margin: 0 auto; margin-top: 10px;">
-          <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-play" fill="currentColor">
-            <path fill-rule="evenodd"
-              d="M10.804 8L5 4.633v6.734L10.804 8zm.792-.696a.802.802 0 0 1 0 1.392l-6.363 3.692C4.713 12.69 4 12.345 4 11.692V4.308c0-.653.713-.998 1.233-.696l6.363 3.692z" />
-          </svg>
-        </button>
-      </div><!-- Graphs tab -->
+      </div> <!-- Graphs tab //-->
     </div>
   </div>
-  <script type="text/javascript" src="vendor/jquery/jquery.slim.min.js"></script>
-  <script type="text/javascript" src="vendor/jquery/jquery.js"></script>
   <script type="text/javascript" src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script type="text/javascript" src="index.js"></script>
 </body>
