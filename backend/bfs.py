@@ -1,190 +1,107 @@
 import networkx as nx
 import matplotlib.pyplot as plt
-import graph4
-import copy
+#import graph5
 
-#hello pal, need to figure out how to save each stage of the folours. issue you are having is that when u append to big
-#big list, the colourassignemnt overwrites the lsit
-global colourBox
-colourBox=[]
+def bfs(adjlist):
 
-global colourAssignment
-colourAssignment=[]
+    #visited list- check if bfs already seen
+    visited=[0]*len(adjlist)
+    queue=[]
+    tour=[0]
+    r=0
+    queue=adjlist[0]
 
-global bigbig
-bigbig=[]
 
-global dic
-dic={}
-
-def bfs(G,a,b):
-    i=0
-    count=0
-    smallNeighbours=[]
-    bigNeighbours=[]
-    G.add_nodes_from(G.nodes(), label = -1) # initialization of all labels
-    G.nodes[a]['label'] = 0
-    global colourAssignment
-    colourAssignment=['']*9
-    global bigbig
-    global dic
-    global colourBox
+    #keeps track of which index of colourList we are allowed to colour the node in
     colourCount=0
+    colourList=['orange','blue','yellow','red','purple']
 
-    print('COCLOURAdd', colourAssignment)
+    #initialise an all white list for the nodes that have not yet been coloured
+    #will get coloured as we go on
+    vColour=['#ffffff']*len(adjlist)
 
-    n = len(G.nodes())
-    listOfColours = ['#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4']
-    x=listOfColours[colourCount]
-    colourBox.append(x)
-    colourAssignment[0]=x
-    bigbig.append(colourAssignment)
-    
-    #print(bigbig[-1])
+    #draws first stage and saves (non coloured graph)
+    nx.draw(G4, pos=positions,node_color=vColour)
+    nx.draw_networkx_labels(G4, pos=positions)
+    order=0
+    plt.savefig((str(order)+"bfs.png"), dpi=300)
+
+    #adds orange to first node 0 (which is node 1 on networkx graph)
+    vColour[0]=colourList[colourCount]
     colourCount+=1
-    G4=graph4.Graph()
-    c=0
-    positions = nx.spring_layout(G4)
-    while (G.nodes[b]['label']==-1):
-        #print('COCLOURAdd', colourAssignment)
 
-        #p=set(colourAssignment)
-        #bigbig.append(list(p))
-        x=copy.deepcopy(colourAssignment)
-        bigbig.append(x)
+    #draws first COLOURED stage and saves
+    order=1
+    nx.draw(G4, pos=positions,node_color=vColour)
+    nx.draw_networkx_labels(G4, pos=positions)
+    plt.savefig((str(order)+"bfs.png"), dpi=300)
 
-        dic[c]=colourAssignment
-        c+=1
+    order=2
+    while(len(queue)!=0):
+        visited[r]=1
 
-##        for i in range(0,len(colourAssignment)):
-##            if colourAssignment[i]=='':
-##                colourAssignment[i]='#ffffff'
-
+        #r keeps track of the first node in queue
+        r=queue[0]
+        tour.append(r)
         
+        #everything thats in the queue at this moment in time must have come from the same node (if not already coloured)
+        #therefore can be coloured the next colour in the list initialised at the top
+        #save new drawn graph at each coloured node stage
+        for i in queue:
+            if vColour[i]=='#ffffff':
+                vColour[i]=colourList[colourCount]
+                nx.draw(G4, pos=positions,node_color=vColour)
+                nx.draw_networkx_labels(G4, pos=positions)
+                plt.savefig((str(order)+"bfs.png"), dpi=300)
+                order+=1
+                plt.show()
+                
         
-##        nx.draw(G4, pos=positions,node_color=colourAssignment)
-##        nx.draw_networkx_labels(G4, pos=positions)
-##        plt.show()
-        #break
-
-##        for i in range(0,len(colourAssignment)):
-##            if colourAssignment[i]=='#ffffff':
-##                colourAssignment[i]=''
-
-        
-       # print('\n')
-    
-      #  print('l',bigbig)
-        for u in range(1,n):
-            if (G.nodes[u]['label']==i):
-                for v in G.neighbors(u):
-                    if (G.nodes[v]['label']==-1):
-                        G.nodes[v]['label']=i+1
-                        smallNeighbours.append(v)
-                        x=listOfColours[colourCount]
-                        colourBox.append(x)
-                        
-                        G.nodes[v]['colour']=x
-                       # print(u,count,v)
-
-                        if(colourAssignment[v-1]==''):
-                            colourAssignment[v-1]=x
-
-                        
-                      #  print('colour', colourBox)
-                       # print('colodddur', colourAssignment)
-
-        plt.show()        
-        bigNeighbours.append(smallNeighbours)
-        smallNeighbours=[]
         colourCount+=1
-        count+=1
-        i=i+1
-       # print(bigNeighbours)
-       # print(smallNeighbours)
+        queue.remove(r)
 
-            
-    #return G.nodes[b]['label']                
-
- 
-print('Graph G4:')
-G=graph4.Graph()
-##print('From Node 1 to 9, answer is:',bfs(G,1,9))
-bfs(G,1,9)
-
-##positions = nx.spring_layout(G)
-##
-##
-##nx.draw(G, pos=positions,node_color=colourAssignment)
-##nx.draw_networkx_labels(G, pos=positions)
-##plt.show()
-
-print('////////////////////////')
-for i in bigbig:
-    print(i)
-    
-
-for i in range(0,len(bigbig)):
-    for j in range(0,len(bigbig)):
-        if(bigbig[i][j]==''):
-            print('yrs')
-            bigbig[i][j]="#ffffff"
+        #add all unvisited nodes that are adjacent to the queue to repeat
+        for i in range(0,len(adjlist[r])):
+            if(visited[adjlist[r][i]]==0 and (adjlist[r][i] not in queue)):
+                    queue.append(adjlist[r][i])
+        		
+    print(vColour)
+    return tour
 
 
-print('d',dic)
-a=[['#e6194b', '#3cb44b', '#3cb44b', '#3cb44b', '#3cb44b', '#ffe119', '#ffe119', '#ffe119', '#4363d8'],
-   ['#e6194b', '#3cb44b', '#3cb44b', '#ffffff', '#3cb44b', '#ffe119', '#ffffff', '#ffe119', '#4363d8'],
-   ['#e6194b', '#3cb44b', '#3cb44b', '#3cb44b', '#3cb44b', '#ffe119', '#ffe119', '#ffe119', '#4363d8'],
-   ['#e6194b', '#3cb44b', '#3cb44b', '#3cb44b', '#3cb44b', '#ffe119', '#ffe119', '#ffe119', '#4363d8']]
-print(len(bigbig))
-G4=graph4.Graph()
+
+
+#old eg
+##G6=graph5.Graph()
+##positions = nx.spring_layout(G6)
+
+
+
+#initialise graph - adj list sets and add edges in a for loop rather than one by one like below
+G4= nx.Graph()
+for i in range(1,9):
+    G4.add_node(i)
+G4.add_edge(1,4)
+G4.add_edge(1,5)
+G4.add_edge(1,6)
+G4.add_edge(1,7)
+G4.add_edge(1,8)
+G4.add_edge(1,9)
+G4.add_edge(3,2)
+G4.add_edge(4,3)
+G4.add_edge(2,1)
+
+G4.add_nodes_from(G4.nodes(), colour='never coloured')
 positions = nx.spring_layout(G4)
 
-aa=[]
-setBig=[]
 
-fire=copy.deepcopy(colourAssignment)
-
-fire=sorted(set(fire), key=fire.index)
-
-print('firee,',fire)
-
-print(colourAssignment)
+#print(bfs([[1],[0,2],[1,3],[2,4],[3]]))
+#print((bfs([[2,3,4],[0,3],[0,1],[0,1],[0]])))
+##print(bfs([[2],[3,4],[0,4],[1],[1,2]]))
 
 
-G4=graph4.Graph()
-positions = nx.spring_layout(G4)
-aa.append(colourAssignment[0])
-##fire.remove(fire[0])
-for j in range(1,len(colourAssignment)):
-    for i in range(0,len(colourAssignment)-1):
-        print('lalalala',colourAssignment[i],aa[-1])
-        print('i,j',i,j)
-        if(colourAssignment[i] == aa[-1] and colourAssignment[i+1] == aa[-1]):
-            aa.append(colourAssignment[i])
-
-    for k in range(len(aa),len(colourAssignment)):
-        print('k',k)
-        aa.append('#ffffff')
-    print('aa',aa)
-    nx.draw(G4, pos=positions,node_color=aa)
-    nx.draw_networkx_labels(G4, pos=positions)
-    plt.show()
-    while '#ffffff' in aa:
-        #print('\n','blah',i)
-        aa.remove('#ffffff')
-    print('aa',aa)
-    fire.remove(fire[0])
-    aa.append(fire[0])
-    
-    print('aafire',aa)
-    
-for i in range(0,len(bigbig)):
-
-    nx.draw(G4, pos=positions,node_color=colourAssignment)
-    nx.draw_networkx_labels(G4, pos=positions)
-    plt.show()
+#bit confusing - nodes on this start at 0 because of indexing, but networkx starts from 1. will change if possible
+print(bfs([[1,3,4,5,6,7,8],[0,2],[1,3],[0,1,2],[0],[0],[0],[0],[0]]))
 
 
-X = nx.bidirectional_shortest_path(G,1,9)
-print('ANSWER SHOULD BE',X)
+
