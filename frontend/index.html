@@ -24,99 +24,77 @@
 
   <!-- Page Content -->
   <div class="container-fluid">
-    <!-- Graphs tab -->
     <div class="row" style="padding: 20px;">
       <!-- Options tab -->
-      <div class="card col-2.5" style="padding: 0px; height: fit-content;">
+      <div class="card col-3" style="padding: 0px; height: fit-content; min-width: 200px;">
         <article class="card-group-item">
           <header class="card-header">
             <h4 class="title">Options</h4>
           </header>
-          <div class="filter-content">
-            <div class="card-body">
-              <form id="userInputForm" name="userInputForm" action="/input" method="post">
-                <div class="form-group">
-                  <label for="exampleFormControlSelect1" style="font-size:20px;">Type of Graph</label>
-                  <div class="custom-control custom-radio">
-                    <input type="radio" id="customRadio1" name="Radio" class="custom-control-input" value="SG"
-                      checked="checked">
-                    <label class="custom-control-label" for="customRadio1">Static graph</label>
-                  </div>
-                  <div class="custom-control custom-radio">
-                    <input type="radio" id="customRadio2" name="Radio" class="custom-control-input" value="DG">
-                    <label class="custom-control-label" for="customRadio2">Dynamic graph</label>
-                  </div>
+          <div class="card-body">
+            <form id="userInputForm" name="userInputForm" action="/input" method="post">
+              <div class="form-group">
+                <label for="exampleFormControlSelect1" style="font-size:20px;">Type of Graph</label>
+                <div class="custom-control custom-radio">
+                  <input type="radio" id="customRadio1" name="Radio" class="custom-control-input" value="SG"
+                    checked="checked">
+                  <label class="custom-control-label" for="customRadio1">Static graph</label>
                 </div>
-                <div class="form-group">
-                  <label for="exampleGraph" style="font-size:20px;">Example graphs</label>
-                  <select class="form-control" id="example">
-                    <option value="None">None</option>
-                    <option value="Cycle" data-toggle="tooltip" data-placement="right"
-                      title="A cycle in a graph is a non-empty trail in which the only repeated vertices are the first and last vertices. A directed cycle in a directed graph is a non-empty directed trail in which the only repeated vertices are the first and last vertices. A graph without cycles is called an acyclic graph.">
-                      Cycle</option>
-                    <option value="Star" data-toggle="tooltip" data-placement="right"
-                      title="A star in a graph is a node-link graph in which one central node is the only neighbour of all the other nodes">
-                      Star</option>
-                    <option value="Path" data-toggle="tooltip" data-placement="right"
-                      title="A path in a graph is The path graph is a node-link graph with two nodes of vertex degree 1, and the other nodes of vertex degree 2. A path graph is therefore a graph that can be drawn so that all of its vertices and edges lie on a single straight line ">
-                      Path</option>
-                    <option value="Tree" data-toggle="tooltip" data-placement="right"
-                      title="In graph theory, a tree is an undirected graph in which any two vertices are connected by exactly one path, or equivalently a connected acyclic undirected graph.[1] A forest is an undirected graph in which any two vertices are connected by at most one path, or equivalently an acyclic undirected graph, or equivalently a disjoint union of trees.">
-                      Tree</option>
-                    <option value="Complete" data-toggle="tooltip" data-placement="right"
-                      title="A complete graph is a simple undirected graph in which every pair of distinct vertices is connected by a unique edge. A complete digraph is a directed graph in which every pair of distinct vertices is connected by a pair of unique edges (one in each direction).">
-                      Complete graph</option>
-                    <option value="Bipartite" data-toggle="tooltip" data-placement="right"
-                      title="A bipartite graph (or bigraph) is a graph whose vertices can be divided into two disjoint and independent sets U and V such that every edge connects a vertex in U to one in V. Vertex sets U and V are usually called the parts of the graph. Equivalently, a bipartite graph is a graph that does not contain any odd-length cycles.">
-                      Bipartite graph</option>
-                    <option value="Hypercubes" data-toggle="tooltip" data-placement="right"
-                      title="*Insert description of hypercube*">
-                      Hypercubes</option>
-                    <option value="Petersen" data-toggle="tooltip" data-placement="right"
-                      title="The Petersen graph is an undirected graph with 10 vertices and 15 edges. It is a small graph that serves as a useful example and counterexample for many problems in graph theory">
-                      Petersen graph</option>
-                    <option value="Petersen" data-toggle="tooltip" data-placement="right" title="Custom">
-                      Custom</option>
-                  </select>
-                  <div id="tooltip_container"></div>
+                <div class="custom-control custom-radio">
+                  <input type="radio" id="customRadio2" name="Radio" class="custom-control-input" value="DG">
+                  <label class="custom-control-label" for="customRadio2">Dynamic graph</label>
                 </div>
-                <div class="form-group">
-                  <label for="nodes" style="font-size:20px;">Number of nodes</label>
-
-                  <input class="form-control" type="number" id="nodes" value="0" min="0" max="10" />
+              </div>
+              <div class="form-group">
+                <label for="exampleGraph" style="font-size:20px;">Example graphs</label>
+                <select class="form-control" id="graph" onchange="changeGraph();"">
+                  <option value="None">None</option>
+                  <option value="Cycle">Cycle</option>
+                  <option value="Star">Star</option>
+                  <option value="Path">Path</option>
+                  <option value="Tree">Tree</option>
+                  <option value="Complete">Complete graph</option>
+                  <option value="Bipartite">Bipartite graph</option>
+                  <option value="Hypercubes">Hypercubes</option>
+                  <option value="Petersen">Petersen graph</option>
+                  <option value="Custom">Custom</option>
+                </select>
+                <div id="graphDesc" style="padding-top:10px;">
+                  Select an example graph to see description
                 </div>
-                <div class="form-group">
-                  <label for="algorithms" style="font-size:20px;">Algorithm</label>
-                  <select class="form-control" id="algorithms">
-                    <option value="None">None</option>
-                    <option value="BFS" data-toggle="tooltip" data-placement="right"
-                      title="BFS starts at the tree root or some arbitrary node of a graph, and explores all of the neighbour nodes at the present depth prior to moving on to the nodes at the next depth level.">
-                      Breath-First Search</option>
-                    <option value="DFS" data-toggle="tooltip" data-placement="right"
-                      title="DFS  starts at the root node or some arbitrary node of a graph, and explores as far as possible along each branch before backtracking.">
-                      Depth-First Search</option>
-                    <option value="SP" data-toggle="tooltip" data-placement="right"
-                      title="Dijkstra's algorithm is an algorithm for finding the shortest paths between nodes in a graph">
-                      Dijkstra's algorithm</option>
-                    <option value="MST" data-toggle="tooltip" data-placement="right"
-                      title="Kruskal's algorithm finds a minimum spanning forest of an undirected edge-weighted graph. If the graph is connected, it finds a minimum spanning tree. (A minimum spanning tree of a connected graph is a subset of the edges that forms a tree that includes every vertex, where the sum of the weights of all the edges in the tree is minimized">
-                      Kruskal's algorithm</option>
-                    <option value="CD" data-toggle="tooltip" data-placement="right"
-                      title="*Insert cycle detection algorithm description*">
-                      Cycle Detection</option>
-                  </select>
+              </div>
+              <div class="form-group">
+                <label for="nodes" style="font-size:20px;">Number of nodes</label>
+                <input class="form-control" type="number" id="nodes" value="0" min="0" max="10" />
+              </div>
+              <div class="form-group">
+                <label for="algorithms" style="font-size:20px;">Algorithm</label>
+                <select class="form-control" id="algorithms" onchange="changeAlgo();">
+                  <option value="None">None</option>
+                  <option value="BFS">Breath-First Search</option>
+                  <option value="DFS">Depth-First Search</option>
+                  <option value="SP">Dijkstra's algorithm</option>
+                  <option value="MST">Kruskal's algorithm</option>
+                  <option value="CD">Cycle Detection</option>
+                </select>
+                <div id="algoDesc" style="padding-top:10px;">
+                  Select an algorithm to see description
                 </div>
-                <button id="compileBtn" type="submit" class="btn btn-success">Compile</button>
-                <input class="btn btn-primary" type="reset" value="Reset" style="float: right;">
-              </form>
-            </div>
+              </div>
+              <button id="compileBtn" type="submit" class="btn btn-success">Compile</button>
+              <input class="btn btn-primary" type="reset" value="Reset" style="float: right;">
+            </form>
+          </div>
         </article>
       </div><!-- Options tab// -->
       <!-- Graphs tab -->
       <div class="col-6" id="slideshow">
         <div>
-          <img class="border border-dark rounded" name="slide" id="imgSlideshow" src="Figure_1.png">
-          <div style="display: flex; justify-content: center;"><h4 id="counter" style="padding-top:7px;"></h4></div>
+          <img class="border border-dark rounded" name="slide" id="imgSlideshow" style="width: 100%; height: auto;"
+            src="Figure_1.png">
+          <div style="display: flex; justify-content: center;">
+            <h4 id="counter" style="padding-top:7px;"></h4>
+          </div>
           <div style="display: flex; justify-content: center;">
             <div style="padding: 10px;">
               <button class="btn btn-secondary" type='button' id='prevBtn' onclick="return previousImage()">
@@ -147,6 +125,7 @@
       </div> <!-- Graphs tab //-->
     </div>
   </div>
+  <script type="text/javascript" src="vendor/jquery/jquery.slim.min.js"></script>
   <script type="text/javascript" src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script type="text/javascript" src="index.js"></script>
 </body>
