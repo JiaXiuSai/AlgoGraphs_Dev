@@ -10,9 +10,10 @@ This website is made for software engineering module group project.
 * Bipartite
 * Hypercubes
 * Petersen
+
 ## Algorithms
 * BFS
 * DFS
-* Dijkstra
-* Kruskal
+* Dijkstra (Shortest path)
+* Kruskal (Minimum Spanning tree)
 * Cycle detection
