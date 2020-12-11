@@ -1,10 +1,18 @@
 # Algorithsm and graphs website
 This website is made for software engineering module group project.
 
-## Group members
-*
-*
-*
-*
-*
-*
+## Graphs
+* Cycle
+* Star
+* Tree
+* Path
+* Complete
+* Bipartite
+* Hypercubes
+* Peterson
+## Algorithms
+* BFS
+* DFS
+* Dijkstra
+* Kruskal
+* Cycle detection
