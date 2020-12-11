@@ -9,7 +9,7 @@ This website is made for software engineering module group project.
 * Complete
 * Bipartite
 * Hypercubes
-* Peterson
+* Petersen
 ## Algorithms
 * BFS
 * DFS
