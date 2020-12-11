@@ -37,7 +37,21 @@ const graphDescDict = {
 function changeGraph() {
   var graph = document.getElementById('graph').value;
   var graphDesc = document.getElementById('graphDesc');
-  graphDesc.innerHTML = graphDescDict[graph];
+  if (graph == "Custom"){
+    graphDesc.innerHTML = "Choose number of nodes, then";
+    var inputButton = document.createElement('button');
+    inputButton.innerHTML = "Select Edges";
+    inputButton.type = 'button'
+    graphDesc.appendChild(inputButton);
+    inputButton.onclick = function() {showGrid()};
+
+    inputButton.addEventListener ('click', function() {
+      var gr = createGrid(document.getElementById("nodes").value);
+      document.getElementById('grid').appendChild(gr);
+    });
+  } else {
+    graphDesc.innerHTML = graphDescDict[graph];
+  }
 }
 
 const algoDescDict = {
@@ -125,3 +139,67 @@ function changeCounter(cur, total) {
   document.getElementById("counter").innerHTML = cur + "/" + total;
 }
 document.getElementById("counter").innerHTML = 1 + "/" + path.length;
+
+
+//Custom input functions
+function showGrid() {
+  document.getElementById("form-container*2").style.display = "block";
+}
+
+function closeGrid() {
+  document.getElementById("form-container*2").style.display = "none";
+}
+
+function createGrid(nodes) {  
+  document.getElementById('grid').innerHTML = "";
+    
+  var gr = document.createElement('table');
+  
+  for (var i = 0; i < nodes; i++) {
+    var row = document.createElement('tr');
+      
+    if (i == 0) {
+      for (var k = 0; k-1 < nodes; k++) {
+        if (k == 0) {
+          var column = document.createElement('td');
+          var blank = document.createElement('P');
+          blank.innerHTML = "";
+          column.appendChild(blank)
+          row.appendChild(column);
+        } else {
+          var column = document.createElement('td');
+          var clabel = document.createElement('P');
+          clabel.innerHTML = k;
+          column.appendChild(clabel)
+          row.appendChild(column);
+        }
+      }
+    gr.appendChild(row);
+    var row = document.createElement('tr');
+    }
+      
+    var column = document.createElement('td');
+    var rlabel = document.createElement('P');
+    rlabel.innerHTML = i+1;
+    column.appendChild(rlabel)
+    row.appendChild(column);
+    
+    for (var j = 0; j < i+1; j++) {
+      var column = document.createElement('td');
+      var dcbox = document.createElement('input');
+      dcbox.type = 'checkbox';
+      dcbox.disabled = true;
+      column.appendChild(dcbox)
+      row.appendChild(column);
+    }    
+    for (var j = i+1; j < nodes; j++) {
+      var column = document.createElement('td')
+      var cbox = document.createElement('input');
+      cbox.type = 'checkbox';
+      column.appendChild(cbox)
+      row.appendChild(column);
+    }
+    gr.appendChild(row);
+  }
+  return gr;
+}

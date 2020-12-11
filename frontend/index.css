@@ -21,3 +21,64 @@
 #slideshow>div>img {
   width: 100%;
 }
+
+#grid td {
+  height: 60px;
+  width: 60px;
+  border: 1px solid #000000;
+  font-size: 20px;
+  text-align: center;
+}
+
+#grid table {
+  border-collapse: collapse;
+}
+
+/*div.grid-container {
+  position: relative;
+  left: 20px;
+}*/
+
+input[type=checkbox] {
+  -ms-transform: scale(1.5);
+  -moz-transform: scale(1.5);
+  -webkit-transform: scale(1.5);
+  -o-transform: scale(1.5);
+  transform: scale(1.5);
+}
+
+.form-popup {
+  display: none;
+  position: absolute;
+  top:85px;
+  left: 350px;
+  border: 3px solid #f1f1f1;
+  background-color: white;
+  z-index: 9;
+}
+
+.form-container {
+  padding: 10px;
+  margin-bottom: 40px;
+  background-color: white;
+}
+
+.btn-submit {
+  border: none;
+  background-color: white;
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  font-size: 18px;
+  text-align: center;
+}
+
+.btn-close {
+  border: none;
+  background-color: white;
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  font-size: 18px;
+  text-align: center;
+}
