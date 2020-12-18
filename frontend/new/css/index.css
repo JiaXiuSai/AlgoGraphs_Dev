@@ -1,0 +1,8 @@
+/* remove rounding from cards, buttons and inputs */
+.card, .btn, .form-control {
+    border-radius: 0;
+}
+
+#mainNav .navbar-nav .nav-item .nav-link.active, #mainNav .navbar-nav .nav-item .nav-link:hover{
+    color: #b47fe6;
+}
