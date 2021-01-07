@@ -1,5 +1,4 @@
 // form input
-// TODO add custom graphs option 
 const inputForm = document.getElementById('userInputForm');
 inputForm.addEventListener('submit', function (event) {
   try {
@@ -13,7 +12,48 @@ inputForm.addEventListener('submit', function (event) {
         break
       }
     }
-    var graph = document.getElementById('graph').value;
+    if (document.getElementById('graph').value == 'Custom') {
+      
+      var nodes = document.getElementById("nodes").value;
+      var matrix = [];
+      for (var m = 0; m < nodes; m++) {
+        matrix[m] = [];
+        for (var n = 0; n < nodes; n++) {
+            matrix[m][n] = 0;
+        }
+      }
+      for (var i = 0; i+1 < nodes; i++) {
+        for (var j = i+1; j < nodes; j++) {
+          var z = 10*i + j;
+          if (document.getElementById(z).checked) {
+            x = z.toString();
+            if (x.length == 1){
+              var a = parseInt(x);
+              if (matrix[0][a] == 0){
+                matrix[0][a] = 1;
+                matrix[a][0] = 1;
+              } else {
+                matrix[0][a] = 0;
+                matrix[a][0] = 0;
+              }
+            } else {
+              var a = parseInt(x.charAt(0));
+              var b = parseInt(x.charAt(1));
+              if (matrix[a][b] == 0){
+                matrix[a][b] = 1;
+                matrix[b][a] = 1;
+              } else {
+                matrix[a][b] = 0;
+                matrix[b][a] = 0;
+              } 
+            }
+          }
+        }
+      }
+      var graph = matrix;
+    } else {
+      var graph = document.getElementById('graph').value;
+    }
     var nodes = document.getElementById('nodes').value;
     var algorithms = document.getElementById('algorithms').value;
     userInput = [type, graph, nodes, algorithms]
@@ -31,7 +71,7 @@ const graphDescDict = {
   Tree: "<h5 class=\"card-title\">Tree Graph</h5><p class=\"card-text\">A tree is an undirected graph in which any two vertices are connected by exactly one path, or equivalently a connected acyclic undirected graph.</p><a href=\"https://www.google.com/search?q=Tree+Graph\" class=\"card-link\" target=\"_blank\" rel=\"noreferrer noopener\">Google</a>",
   Complete: "<h5 class=\"card-title\">Complete Graph</h5><p class=\"card-text\">A complete graph is a simple undirected graph in which every pair of distinct vertices is connected by a unique edge</p><a href=\"https://www.google.com/search?q=Complete+Graph\" class=\"card-link\" target=\"_blank\" rel=\"noreferrer noopener\">Google</a>",
   Bipartite: "<h5 class=\"card-title\">Bipartite Graph</h5><p class=\"card-text\">A bipartite graph (or bigraph) is a graph whose vertices can be divided into two disjoint and independent sets U and V such that every edge connects a vertex in U to one in V.</p><a href=\"https://www.google.com/search?q=Bipartite+Graph\" class=\"card-link\" target=\"_blank\" rel=\"noreferrer noopener\">Google</a>",
-  Hypercubes: "<h5 class=\"card-title\">Hypercubes Graph</h5><p class=\"card-text\">The hypercube graph Q<sub>n</sub> is the graph formed from the vertices and edges of an n-dimensional hypercube</p>.<a href=\"https://www.google.com/search?q=Hypercube+Graph\" class=\"card-link\" target=\"_blank\" rel=\"noreferrer noopener\">Google</a>",
+  Hypercubes: "<h5 class=\"card-title\">Hypercubes Graph</h5><p class=\"card-text\">The hypercube graph Q<sub>n</sub> is the graph formed from the vertices and edges of an n-dimensional hypercube.</p><a href=\"https://www.google.com/search?q=Hypercube+Graph\" class=\"card-link\" target=\"_blank\" rel=\"noreferrer noopener\">Google</a>",
   Petersen: "<h5 class=\"card-title\">Petersen Graph</h5><p class=\"card-text\">The Petersen graph is an undirected graph with 10 vertices and 15 edges. It can be described as pentagon with a connected star inside.</p><a href=\"https://www.google.com/search?q=Petersen+Graph\" class=\"card-link\" target=\"_blank\ rel=\"noreferrer noopener\">Google</a>",
 }
 
@@ -39,21 +79,12 @@ function changeGraph() {
   var graph = document.getElementById('graph').value;
   var graphDesc = document.getElementById('graphDesc');
   if (graph == "Custom") {
-    graphDesc.innerHTML = "Choose number of nodes, then";
-    var inputButton = document.createElement('button');
-    inputButton.innerHTML = "Select Edges";
-    inputButton.type = 'button'
-    graphDesc.appendChild(inputButton);
-    inputButton.onclick = function () {
-      showGrid()
-    };
-
-    inputButton.addEventListener('click', function () {
-      var gr = createGrid(document.getElementById("nodes").value);
-      document.getElementById('grid').appendChild(gr);
-    });
+    graphDesc.innerHTML = "Select Edges ";
+    var gr = createGrid(document.getElementById("nodes").value);
+    document.getElementById('grid').appendChild(gr);
   } else {
     graphDesc.innerHTML = graphDescDict[graph];
+    document.getElementById('grid').innerHTML = "";
   }
 }
 
@@ -66,10 +97,44 @@ const algoDescDict = {
   CD: "<h6 class=\"card-subtitle mb-2 text-muted text-center\" rel=\"noreferrer noopener\">To decide if directed or not</h6>"
 }
 
+const algoBlankDict = {
+  None: "<h6 class=\"card-subtitle mb-2 text-muted text-center\">Select an example algorithm to see code</h6>",
+  BFS: "<i>G</i> = graph<br><i>root</i> = starting node<br>BFS(<i>G</i>, <i>root</i>)<br><br>let <i>Q</i> be a queue<br>label <i>root</i> as discovered<br><input><br><br><b>while</b> <i>Q</i>  is not empty <b>do</b><ol><i>v</i> = <i>Q</i>.dequeue()<br><b>if</b> <input> <b>then</b><ol><b>return</b> <i>v</i></ol><b>for all</b> edges from <i>v</i> to <i>w</i> <b>in</b> <i>G</i>.adjacent(<i>v</i>) <b>do</b><ol><b>if</b> <i>w</i> is not labeled as discovered <b>then</b><ol>label <i>w</i> as discovered<br><input><br>",
+  DFS: "<i>G</i> = graph<br><i>v</i> = starting node<br>DFS(<i>G</i>, <i>v</i>)<br><br>label <i>v</i> as discovered<br><br><b>for all</b> <i>v</i> to <i>w</i> <b>in</b> <i>G</i>.adjacent(<i>v</i>) <b>do</b><ol><b>if</b> vertex <i>w</i> is not labeled as discovered <b>then</b><ol><input><br>",
+  SP: "<i>G</i> = graph<br><i>start</i> = starting node<br>Dijkstra(<i>G</i>, <i>start</i>)<br><br>let <i>Q</i> be a set of nodes<br><br><b>for each</b> vertex <i>v</i> in <i>G</i> <b>do</b><ol>distance[<i>v</i>] = infinity<br>prev[<i>v</i>] = undefined<br>add <i>v</i> to <i>Q</i></ol><input><br><br><b>while</b> <input> <b>do</b><ol><i>u</i> = vertex in <i>Q</i> with minimum distance[<i>u</i>]<br>remove <i>u</i> from <i>Q</i><br><b>for each</b> neighbor <i>v</i> of <i>u</i> <b>do</b><ol><i>compare</i> = <input><br><b>if</b> <i>compare</i> < distance[<i>v</i>] <b>do</b><ol>distance[<i>v</i>] = <i>compare</i><br>prev[<i>v</i>] = <i>u</i></ol></ol></ol><b>return</b> distance[], prev[]<br>",
+  MST: "<i>G</i> = graph<br>Kruskal(<i>G</i>)<br><br>let <i>F</i> be a set of edges<br><br><b>for each</b> (<i>u</i>, <i>v</i>) <b>in</b> <i>G</i>.edges ordered by <input> <b>do</b><ol><b>if</b> (<i>u</i>, <i>v</i>) <input> <b>then</b><ol>add (<i>u</i>, <i>v</i>) to <i>F</i></ol></ol><b>return</b> <i>F</i><br>",
+  CD: "<h6 class=\"card-subtitle mb-2 text-muted text-center\" rel=\"noreferrer noopener\">To decide if directed or not</h6>"
+}
+
+const algoAnsDict = {
+  None: "<h6 class=\"card-subtitle mb-2 text-muted text-center\">Select an example algorithm to see code</h6>",
+  BFS: "<i>G</i> = graph<br><i>root</i> = starting node<br>BFS(<i>G</i>, <i>root</i>)<br><br>let <i>Q</i> be a queue<br>label <i>root</i> as discovered<br><i>Q</i>.enqueue(<i>root</i>)<br><br><b>while</b> <i>Q</i>  is not empty <b>do</b><ol><i>v</i> = <i>Q</i>.dequeue()<br><b>if</b> <i>v</i> is the goal <b>then</b><ol><b>return</b> <i>v</i></ol><b>for all</b> edges from <i>v</i> to <i>w</i> <b>in</b> <i>G</i>.adjacent(<i>v</i>) <b>do</b><ol><b>if</b> <i>w</i> is not labeled as discovered <b>then</b><ol>label <i>w</i> as discovered<br><i>Q</i>.enqueue(<i>w</i>)",
+  DFS: "<i>G</i> = graph<br><i>v</i> = starting node<br>DFS(<i>G</i>, <i>v</i>)<br><br>label <i>v</i> as discovered<br><br><b>for all</b> <i>v</i> to <i>w</i> <b>in</b> <i>G</i>.adjacent(<i>v</i>) <b>do</b><ol><b>if</b> vertex <i>w</i> is not labeled as discovered <b>then</b><ol>recursively call DFS(<i>G</i>, <i>w</i>)",
+  SP: "<i>G</i> = graph<br><i>start</i> = starting node<br>Dijkstra(<i>G</i>, <i>start</i>)<br><br>let <i>Q</i> be a set of nodes<br><br><b>for each</b> vertex <i>v</i> in <i>G</i> <b>do</b><ol>distance[<i>v</i>] = infinity<br>prev[<i>v</i>] = undefined<br>add <i>v</i> to <i>Q</i></ol>distance[<i>start</i>] = 0<br><br><b>while</b> <i>Q</i> is not empty <b>do</b><ol><i>u</i> = vertex in <i>Q</i> with minimum distance[<i>u</i>]<br>remove <i>u</i> from <i>Q</i><br><b>for each</b> neighbor <i>v</i> of <i>u</i> <b>do</b><ol><i>compare</i> = distance[<i>u</i>] + length(<i>u</i>, <i>v</i>)<br><b>if</b> <i>compare</i> < distance[<i>v</i>] <b>do</b><ol>distance[<i>v</i>] = <i>compare</i><br>prev[<i>v</i>] = <i>u</i></ol></ol></ol><b>return</b> distance[], prev[]",
+  MST: "<i>G</i> = graph<br>Kruskal(<i>G</i>)<br><br>let <i>F</i> be a set of edges<br><br><b>for each</b> (<i>u</i>, <i>v</i>) <b>in</b> <i>G</i>.edges ordered by low to high weight <b>do</b><ol><b>if</b> (<i>u</i>, <i>v</i>) does not make a cycle in <i>F</i> <b>then</b><ol>add (<i>u</i>, <i>v</i>) to <i>F</i></ol></ol><b>return</b> <i>F</i>",
+  CD: "<h6 class=\"card-subtitle mb-2 text-muted text-center\" rel=\"noreferrer noopener\">To decide if directed or not</h6>"
+}
+
 function changeAlgo() {
   var algorithms = document.getElementById('algorithms').value;
   var algoDesc = document.getElementById('algoDesc');
-  algoDesc.innerHTML = algoDescDict[algorithms];
+  if (document.getElementById("codeBtn").innerHTML == "Code") {
+    algoDesc.innerHTML = algoDescDict[algorithms];
+  } else {
+    algoDesc.innerHTML = algoBlankDict[algorithms];
+    var ansBtn = document.createElement('button');
+    ansBtn.type = 'button';
+    ansBtn.innerHTML = "See Answers";
+    ansBtn.id = "ansBtn"
+    ansBtn.onclick = function() {
+      if (document.getElementById("ansBtn").innerHTML == "See Answers") {
+        var algorithms = document.getElementById('algorithms').value;
+        var algoDesc = document.getElementById('algoDesc');
+        algoDesc.innerHTML = algoAnsDict[algorithms];
+      }
+    }
+    document.getElementById("algoDesc").appendChild(ansBtn);
+  }
 }
 
 // SLideshow functions
@@ -172,6 +237,8 @@ function createGrid(nodes) {
   document.getElementById('grid').innerHTML = "";
 
   var gr = document.createElement('table');
+  gr.id = 'gtable'
+  
 
   for (var i = 0; i < nodes; i++) {
     var row = document.createElement('tr');
@@ -211,13 +278,43 @@ function createGrid(nodes) {
       row.appendChild(column);
     }
     for (var j = i + 1; j < nodes; j++) {
-      var column = document.createElement('td')
+      var column = document.createElement('td');
       var cbox = document.createElement('input');
+      var z = 10*i + j;
       cbox.type = 'checkbox';
+      cbox.id = z;
+      
       column.appendChild(cbox)
       row.appendChild(column);
     }
     gr.appendChild(row);
   }
   return gr;
+}
+
+
+function codeMode() {
+  if (document.getElementById("codeBtn").innerHTML == "Code") {
+  var ansBtn = document.createElement('button');
+  ansBtn.type = 'button';
+  ansBtn.innerHTML = "See Answers";
+  ansBtn.id = "ansBtn"
+  ansBtn.onclick = function() {
+    if (document.getElementById("ansBtn").innerHTML == "See Answers") {
+      var algorithms = document.getElementById('algorithms').value;
+      var algoDesc = document.getElementById('algoDesc');
+      algoDesc.innerHTML = algoAnsDict[algorithms];
+    }
+  }
+  var algorithms = document.getElementById('algorithms').value;
+  var algoDesc = document.getElementById('algoDesc');
+  algoDesc.innerHTML = algoBlankDict[algorithms];
+  document.getElementById("algoDesc").appendChild(ansBtn);
+  document.getElementById("codeBtn").innerHTML = "Description";
+ } else {
+  var algorithms = document.getElementById('algorithms').value;
+  var algoDesc = document.getElementById('algoDesc');
+  algoDesc.innerHTML = algoDescDict[algorithms];
+  document.getElementById("codeBtn").innerHTML = "Code";
+  }
 }

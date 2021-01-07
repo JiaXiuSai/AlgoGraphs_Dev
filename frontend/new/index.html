@@ -163,7 +163,7 @@
                         </div>
                         <div class="col-lg-3 col-sm-6 mb-3">
                             <h5 class="text-center">Number of nodes</h5>
-                            <input class="form-control" type="number" id="nodes" value="0" min="0" max="10" />
+                            <input class="form-control" type="number" id="nodes" value="0" min="0" max="10"/>
                         </div>
                         <div class="col-lg-3 col-sm-6 mb-3">
                             <h5 class="text-center">Graphs</h5>
@@ -181,7 +181,7 @@
                             </select>
                         </div>
                         <div class="col-lg-3 col-sm-6 mb-3">
-                            <h5 class="text-center">Algorithms</h5>
+                            <h5 class="text-center">Algorithms <button type="button" id="codeBtn" onclick="codeMode()">Code</button></h5>
                             <select class="form-control" id="algorithms" onchange="changeAlgo();">
                                 <option value="None">None</option>
                                 <option value="BFS">Breath-First Search</option>
@@ -210,6 +210,7 @@
                         <h6 class="card-subtitle mb-2 text-muted text-center">Choose an example graph to see
                             description</h6>
                     </div>
+                    <div id="grid" class="grid-container"></div>
                 </div>
                 <div class="col-lg-1"></div>
                 <div class="col-lg-5 card" style="display: inline-block">
@@ -218,6 +219,7 @@
                             description</h6>
                     </div>
                 </div>
+                
             </div>
         </div>
     </section>

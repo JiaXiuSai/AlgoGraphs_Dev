@@ -6,3 +6,28 @@
 #mainNav .navbar-nav .nav-item .nav-link.active, #mainNav .navbar-nav .nav-item .nav-link:hover{
     color: #b47fe6;
 }
+
+#grid td {
+    height: 0px;
+    width: 40px;
+    border: 1px solid #000000;
+    font-size: 20px;
+    text-align: center;
+}
+  
+#grid table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+input[type=checkbox] {
+    -ms-transform: scale(1.5);
+    -moz-transform: scale(1.5);
+    -webkit-transform: scale(1.5);
+    -o-transform: scale(1.5);
+    transform: scale(1.5);
+}
+
+#codeBtn {
+    font-size: 18px;
+}
