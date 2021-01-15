@@ -37,7 +37,7 @@ need adding/doing
 """
 
 
-
+#ADD POSITIONS AS PARAMETERS AND RETURNS SO THE GRAPH LOOKS CONSISTENT
 
 def cycle(numNodes):
 
