@@ -3,10 +3,6 @@
     border-radius: 0;
 }
 
-#mainNav .navbar-nav .nav-item .nav-link.active, #mainNav .navbar-nav .nav-item .nav-link:hover{
-    color: #b47fe6;
-}
-
 #grid td {
     height: 0px;
     width: 40px;

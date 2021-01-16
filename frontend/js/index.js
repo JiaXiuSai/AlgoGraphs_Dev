@@ -1,35 +1,52 @@
+// Button controls for nodes
+function upNodes(max) {
+  document.getElementById("nodes").value = parseInt(document.getElementById("nodes").value) + 1;
+  if (document.getElementById("nodes").value >= parseInt(max)) {
+    document.getElementById("nodes").value = max;
+  }
+  if (document.getElementById("nodes").value == "NaN") {
+    document.getElementById("nodes").value = max;
+  }
+}
+function downNodes(min) {
+  document.getElementById("nodes").value = parseInt(document.getElementById("nodes").value) - 1;
+  if (document.getElementById("nodes").value <= parseInt(min)) {
+    document.getElementById("nodes").value = min;
+  }
+  if (document.getElementById("nodes").value == "NaN") {
+    document.getElementById("nodes").value = min;
+  }
+}
+
 // form input
 const inputForm = document.getElementById('userInputForm');
 inputForm.addEventListener('submit', function (event) {
   try {
     // stop default form action (client-side)
     event.preventDefault();
-    var radios = document.getElementsByName('Radio');
-    // find and record check radio value
-    for (var i = 0, length = radios.length; i < length; i++) {
-      if (radios[i].checked) {
-        type = radios[i].value
-        break
-      }
+    if(document.getElementById("typeToggle").checked){
+      type = "SG";
+    } else {
+      type = "DG";
     }
     if (document.getElementById('graph').value == 'Custom') {
-      
+
       var nodes = document.getElementById("nodes").value;
       var matrix = [];
       for (var m = 0; m < nodes; m++) {
         matrix[m] = [];
         for (var n = 0; n < nodes; n++) {
-            matrix[m][n] = 0;
+          matrix[m][n] = 0;
         }
       }
-      for (var i = 0; i+1 < nodes; i++) {
-        for (var j = i+1; j < nodes; j++) {
-          var z = 10*i + j;
+      for (var i = 0; i + 1 < nodes; i++) {
+        for (var j = i + 1; j < nodes; j++) {
+          var z = 10 * i + j;
           if (document.getElementById(z).checked) {
             x = z.toString();
-            if (x.length == 1){
+            if (x.length == 1) {
               var a = parseInt(x);
-              if (matrix[0][a] == 0){
+              if (matrix[0][a] == 0) {
                 matrix[0][a] = 1;
                 matrix[a][0] = 1;
               } else {
@@ -39,13 +56,13 @@ inputForm.addEventListener('submit', function (event) {
             } else {
               var a = parseInt(x.charAt(0));
               var b = parseInt(x.charAt(1));
-              if (matrix[a][b] == 0){
+              if (matrix[a][b] == 0) {
                 matrix[a][b] = 1;
                 matrix[b][a] = 1;
               } else {
                 matrix[a][b] = 0;
                 matrix[b][a] = 0;
-              } 
+              }
             }
           }
         }
@@ -78,6 +95,19 @@ const graphDescDict = {
 function changeGraph() {
   var graph = document.getElementById('graph').value;
   var graphDesc = document.getElementById('graphDesc');
+  if (graph == "Petersen") {
+    document.getElementById("nodes").value = "15";
+    document.getElementById("up").disabled = true;
+    document.getElementById("down").disabled = true;
+    document.getElementById("nodes").disabled = true;
+  } else {
+    if (document.getElementById("nodes").value >= 10) {
+      document.getElementById("nodes").value = 10;
+    }
+    document.getElementById("up").disabled = false;
+    document.getElementById("down").disabled = false;
+    document.getElementById("nodes").disabled = false;
+  }
   if (graph == "Custom") {
     graphDesc.innerHTML = "Select Edges ";
     var gr = createGrid(document.getElementById("nodes").value);
@@ -123,10 +153,11 @@ function changeAlgo() {
   } else {
     algoDesc.innerHTML = algoBlankDict[algorithms];
     var ansBtn = document.createElement('button');
-    ansBtn.type = 'button';
+    ansBtn.type = "button";
+    ansBtn.className = "btn btn-outline-dark";
     ansBtn.innerHTML = "See Answers";
     ansBtn.id = "ansBtn"
-    ansBtn.onclick = function() {
+    ansBtn.onclick = function () {
       if (document.getElementById("ansBtn").innerHTML == "See Answers") {
         var algorithms = document.getElementById('algorithms').value;
         var algoDesc = document.getElementById('algoDesc');
@@ -136,6 +167,15 @@ function changeAlgo() {
     document.getElementById("algoDesc").appendChild(ansBtn);
   }
 }
+
+// Reset for description boxes
+function resetDesc() {
+  graphDesc.innerHTML = graphDescDict["None"];
+  document.getElementById('grid').innerHTML = "";
+  algoDesc.innerHTML = algoDescDict["None"];
+  document.getElementById("codeBtn").innerHTML = "Code";
+}
+
 
 // SLideshow functions
 var x = false
@@ -154,9 +194,9 @@ const startCycle = document.getElementById('startCycle');
 const sliderLabel = document.getElementById('sliderLabel');
 const speedSlider = document.getElementById('speedSlider');
 
-speedSlider.addEventListener('click', function (){
+speedSlider.addEventListener('click', function () {
   var scale = speedSlider.value
-  speed = 2000 + (1-scale)*1500;
+  speed = 2000 + (1 - scale) * 1500;
   sliderLabel.innerHTML = "Speed(×" + scale + ")"
   if (timer) {
     clearInterval(timer);
@@ -172,7 +212,7 @@ startCycle.addEventListener('click', function () {
     setTimeout(function () {
       startCycle.disabled = false;
       startCycle.innerHTML = pause;
-    }, speed/2);
+    }, speed / 2);
   } else {
     startCycle.innerHTML = play
     x = !x
@@ -187,6 +227,7 @@ function slide() {
 }
 
 var timer = null;
+
 function setTimer() {
   if (timer) {
     clearInterval(timer);
@@ -238,7 +279,7 @@ function createGrid(nodes) {
 
   var gr = document.createElement('table');
   gr.id = 'gtable'
-  
+
 
   for (var i = 0; i < nodes; i++) {
     var row = document.createElement('tr');
@@ -280,10 +321,10 @@ function createGrid(nodes) {
     for (var j = i + 1; j < nodes; j++) {
       var column = document.createElement('td');
       var cbox = document.createElement('input');
-      var z = 10*i + j;
+      var z = 10 * i + j;
       cbox.type = 'checkbox';
       cbox.id = z;
-      
+
       column.appendChild(cbox)
       row.appendChild(column);
     }
@@ -295,26 +336,27 @@ function createGrid(nodes) {
 
 function codeMode() {
   if (document.getElementById("codeBtn").innerHTML == "Code") {
-  var ansBtn = document.createElement('button');
-  ansBtn.type = 'button';
-  ansBtn.innerHTML = "See Answers";
-  ansBtn.id = "ansBtn"
-  ansBtn.onclick = function() {
-    if (document.getElementById("ansBtn").innerHTML == "See Answers") {
-      var algorithms = document.getElementById('algorithms').value;
-      var algoDesc = document.getElementById('algoDesc');
-      algoDesc.innerHTML = algoAnsDict[algorithms];
+    var ansBtn = document.createElement('button');
+    ansBtn.type = 'button';
+    ansBtn.className = "btn btn-outline-dark";
+    ansBtn.innerHTML = "See Answers";
+    ansBtn.id = "ansBtn"
+    ansBtn.onclick = function () {
+      if (document.getElementById("ansBtn").innerHTML == "See Answers") {
+        var algorithms = document.getElementById('algorithms').value;
+        var algoDesc = document.getElementById('algoDesc');
+        algoDesc.innerHTML = algoAnsDict[algorithms];
+      }
     }
-  }
-  var algorithms = document.getElementById('algorithms').value;
-  var algoDesc = document.getElementById('algoDesc');
-  algoDesc.innerHTML = algoBlankDict[algorithms];
-  document.getElementById("algoDesc").appendChild(ansBtn);
-  document.getElementById("codeBtn").innerHTML = "Description";
- } else {
-  var algorithms = document.getElementById('algorithms').value;
-  var algoDesc = document.getElementById('algoDesc');
-  algoDesc.innerHTML = algoDescDict[algorithms];
-  document.getElementById("codeBtn").innerHTML = "Code";
+    var algorithms = document.getElementById('algorithms').value;
+    var algoDesc = document.getElementById('algoDesc');
+    algoDesc.innerHTML = algoBlankDict[algorithms];
+    document.getElementById("algoDesc").appendChild(ansBtn);
+    document.getElementById("codeBtn").innerHTML = "Description";
+  } else {
+    var algorithms = document.getElementById('algorithms').value;
+    var algoDesc = document.getElementById('algoDesc');
+    algoDesc.innerHTML = algoDescDict[algorithms];
+    document.getElementById("codeBtn").innerHTML = "Code";
   }
 }
