@@ -1,4 +1,4 @@
-# Algorithsm and graphs website
+# Algorithms and graphs website
 This website is made for software engineering module group project.
 
 ## Graphs
