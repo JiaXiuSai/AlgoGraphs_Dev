@@ -2,19 +2,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import random
 
-#will need to check if the user has chosen to run an alg on chosen graph, since
-#this may slightly alter how it works ie saving figures, may need to add
-#an additional parameter that is passed from frontend if the user has selected
-#to run a search algorithm, if they have selected, then draw
-#or have own seperate drawing function? may not work for search algs
 
-# was thiking about sep drawing func just for the graphs that could be run if the
-#search algs dont execute but will be an issue for some creation algs like
-#hypercube, bipartite
-
-
-##fix hypercube, there is something up wilth the graph when building the
-#hypercube because [0,1,2] it ignoes the zero
 
 """
 all these added below
@@ -30,12 +18,15 @@ all these added below
 9. custom
 
 
-need adding/doing
+
 1. bfs
 2. dfs
 3. dijkstra
 4. kruskal
 5. cycle
+
+
+need adding/doing: dijkstra, kruskal, temporal
 
 !!!!!!!!!!temporal!!!!!!!!!
 
@@ -241,7 +232,47 @@ def hypercube(n):
     if n==0:
         x= nx.Graph()
         x.add_node(0)
+        
     #else:
+    elif n==4:
+        x= nx.Graph()
+        for i in range(0,2**n):
+            x.add_node(i)
+        x.add_edge(0,1)
+        x.add_edge(0,2)
+        x.add_edge(0,3)
+        x.add_edge(1,4)
+        x.add_edge(1,5)
+        x.add_edge(2,4)
+        x.add_edge(2,6)
+        x.add_edge(3,5)
+        x.add_edge(3,6)
+        x.add_edge(4,7)
+        x.add_edge(5,7)
+        x.add_edge(6,7)
+
+        x.add_edge(8,9)
+        x.add_edge(8,10)
+        x.add_edge(8,11)
+        x.add_edge(9,12)
+        x.add_edge(9,13)
+        x.add_edge(10,12)
+        x.add_edge(10,14)
+        x.add_edge(11,13)
+        x.add_edge(11,14)
+        x.add_edge(12,15)
+        x.add_edge(13,15)
+        x.add_edge(14,15)
+
+        x.add_edge(0,8)
+        x.add_edge(1,9)
+        x.add_edge(2,10)
+        x.add_edge(3,11)
+        x.add_edge(4,12)
+        x.add_edge(5,13)
+        x.add_edge(6,14)
+        x.add_edge(7,15)
+        
     elif n==3:
         x= nx.Graph()
         for i in range(0,2**n):
@@ -267,12 +298,13 @@ def hypercube(n):
         x.add_edge(1,2)
         x.add_edge(2,3)
         x.add_edge(0,3)
+        
     elif n==1:
         x= nx.Graph()
         for i in range(0,2**n):
             x.add_node(i)
         x.add_edge(0,1)
-
+        
     #x=nx.generators.lattice.hypercube_graph(n)
     positions = nx.spring_layout(x, scale=0.8)
     nx.draw(x, pos=positions,node_color='grey', width=1, edge_color="skyblue", style="solid")
@@ -308,7 +340,6 @@ def petersen():
     return adjlist,Graph,positions
 
 def custom(adj):
-    
     plt.clf()
     G= nx.Graph()
 
