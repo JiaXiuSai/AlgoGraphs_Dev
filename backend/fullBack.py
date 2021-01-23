@@ -339,6 +339,8 @@ def petersen():
   
     return adjlist,Graph,positions
 
+
+#custom([[0,0,1],[0,0,1],[1,1,0]])
 def custom(adj):
     plt.clf()
     G= nx.Graph()
@@ -354,18 +356,18 @@ def custom(adj):
     G.add_nodes_from(G.nodes(), colour='never coloured')
     positions = nx.spring_layout(G)
     nx.draw(G, pos=positions,node_color='white')
-    nx.draw_networkx_labels(G, pos=positions)
+    nx.draw_networkx_labels(G, pos=positions,labels={n: n+1 for n in G})
+
+    #nx.draw_networkx_labels(G, pos=positions)
     
     plt.savefig((str(len(adj))+"custom.png"), dpi=300)
     #plt.show()
-
-    x = nx.convert.to_dict_of_lists(Graph)
+    adjlist=[]
+    x = nx.convert.to_dict_of_lists(G)
     for i in x.values():
         adjlist.append(i)
   
     return adjlist,G,positions
-
-
 
 def cycleDetection(G,positions):
     plt.clf()
