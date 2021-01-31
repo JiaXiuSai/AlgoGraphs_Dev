@@ -1,37 +1,23 @@
-// Button controls for nodes
-function upNodes(max) {
-  document.getElementById("nodes").value = parseInt(document.getElementById("nodes").value) + 1;
-  if (document.getElementById("nodes").value >= parseInt(max)) {
-    document.getElementById("nodes").value = max;
-  }
-  if (document.getElementById("nodes").value == "NaN") {
-    document.getElementById("nodes").value = max;
-  }
-}
-function downNodes(min) {
-  document.getElementById("nodes").value = parseInt(document.getElementById("nodes").value) - 1;
-  if (document.getElementById("nodes").value <= parseInt(min)) {
-    document.getElementById("nodes").value = min;
-  }
-  if (document.getElementById("nodes").value == "NaN") {
-    document.getElementById("nodes").value = min;
-  }
-}
-
-// form input
+// form input and parsing
+// TODO include request sent and receive 
 const inputForm = document.getElementById('userInputForm');
 inputForm.addEventListener('submit', function (event) {
   try {
     // stop default form action (client-side)
     event.preventDefault();
-    if(document.getElementById("typeToggle").checked){
+
+    if (document.getElementById("typeToggle").checked) {
       type = "SG";
     } else {
       type = "DG";
     }
-    if (document.getElementById('graph').value == 'Custom') {
+    var graph = document.getElementById('graph').value;
+    var nodes = document.getElementById("nodes").value;
+    var error = document.getElementById('error-nodes');
+    var algorithms = document.getElementById('algorithms').value;
 
-      var nodes = document.getElementById("nodes").value;
+    if (graph == 'Custom') {
+
       var matrix = [];
       for (var m = 0; m < nodes; m++) {
         matrix[m] = [];
@@ -67,18 +53,71 @@ inputForm.addEventListener('submit', function (event) {
           }
         }
       }
-      var graph = matrix;
-    } else {
-      var graph = document.getElementById('graph').value;
+      graph = matrix;
     }
-    var nodes = document.getElementById('nodes').value;
-    var algorithms = document.getElementById('algorithms').value;
+    if (isNaN(nodes)) {
+      if (graph == 'Hypercubes') {
+        error.innerHTML = "Must be 1,4 or 8 nodes for hypercube";
+      } else {
+        error.innerHTML = "Must be between 1 to 10 nodes";
+      }
+      error.classList.add("d-block");
+      return
+    } else {
+      if (graph == 'Hypercubes' && (nodes != '1' || nodes != '4' || nodes != '8')) {
+        error.innerHTML = "Must be 1,4 or 8 nodes for hypercube";
+        error.classList.add("d-block");
+        return
+      }
+    }
     userInput = [type, graph, nodes, algorithms]
+    error.classList.remove("d-block");
     console.log(userInput)
   } catch (error) {
     window.alert(error);
   }
 });
+
+
+// button control functions for increasing number of nodes nodes
+function upNodes(max) {
+  if ('Hypercubes' == document.getElementById("graph").value) {
+    if (document.getElementById("nodes").value < 4) {
+      document.getElementById("nodes").value = 4
+    } else {
+      document.getElementById("nodes").value = 8
+    }
+  } else {
+    document.getElementById("nodes").value = parseInt(document.getElementById("nodes").value) + 1;
+    if (document.getElementById("nodes").value >= parseInt(max)) {
+      document.getElementById("nodes").value = max;
+    }
+    if (document.getElementById("nodes").value == "NaN") {
+      document.getElementById("nodes").value = max;
+    }
+  }
+}
+
+
+// button control functions for decreasing number of nodes nodes
+function downNodes(min) {
+  if ('Hypercubes' == document.getElementById("graph").value) {
+    if (document.getElementById("nodes").value > 4) {
+      document.getElementById("nodes").value = 4
+    } else {
+      document.getElementById("nodes").value = 1
+    }
+  } else {
+    document.getElementById("nodes").value = parseInt(document.getElementById("nodes").value) - 1;
+    if (document.getElementById("nodes").value <= parseInt(min)) {
+      document.getElementById("nodes").value = min;
+    }
+    if (document.getElementById("nodes").value == "NaN") {
+      document.getElementById("nodes").value = min;
+    }
+  }
+}
+
 
 const graphDescDict = {
   None: "<h6 class=\"card-subtitle mb-2 text-muted text-center\">Choose an example graph to see description</h6>",
@@ -92,14 +131,27 @@ const graphDescDict = {
   Petersen: "<h5 class=\"card-title\">Petersen Graph</h5><p class=\"card-text\">The Petersen graph is an undirected graph with 10 vertices and 15 edges. It can be described as pentagon with a connected star inside.</p><a href=\"https://www.google.com/search?q=Petersen+Graph\" class=\"card-link\" target=\"_blank\ rel=\"noreferrer noopener\">Google</a>",
 }
 
+
+// function for changing graphs
 function changeGraph() {
   var graph = document.getElementById('graph').value;
   var graphDesc = document.getElementById('graphDesc');
   if (graph == "Petersen") {
-    document.getElementById("nodes").value = "15";
+    document.getElementById("nodes").value = "10";
     document.getElementById("up").disabled = true;
     document.getElementById("down").disabled = true;
     document.getElementById("nodes").disabled = true;
+  } else if (graph == "Hypercubes") {
+    if (document.getElementById("nodes").value > 7) {
+      document.getElementById("nodes").value = 8
+    } else if (document.getElementById("nodes").value > 3) {
+      document.getElementById("nodes").value = 4
+    } else {
+      document.getElementById("nodes").value = 1
+    }
+    document.getElementById("up").disabled = false;
+    document.getElementById("down").disabled = false;
+    document.getElementById("nodes").disabled = false;
   } else {
     if (document.getElementById("nodes").value >= 10) {
       document.getElementById("nodes").value = 10;
@@ -118,13 +170,15 @@ function changeGraph() {
   }
 }
 
+
 const algoDescDict = {
   None: "<h6 class=\"card-subtitle mb-2 text-muted text-center\">Select an example algorithm to see description</h6>",
   BFS: "<h5 class=\"card-title\">Breadth-first search</h5><p class=\"card-text\">Breadth-first search is a graph traversal algorithm that starts traversing the graph from root node and explores all the neighbouring nodes. Then, it selects the nearest node and explores all the unexplored nodes. The algorithm follows the same process for each of the nearest nodes until it finds the goal.</p><a href=\"https://www.google.com/search?q=Breath+First+Search\" class=\"card-link\" target=\"_blank\" rel=\"noreferrer noopener\">Google</a>",
   DFS: "<h5 class=\"card-title\">Depth-first search</h5><p class=\"card-text\">Depth-first search is a graph traversal algorithm that starts traversing the graph from the root node and explores as far as possible along each branch before backtracking. So the basic idea is to start from the root or any arbitrary node and mark the node and move to the adjacent unmarked node and continue this loop until there is no unmarked adjacent node. Then backtrack and check for other unmarked nodes and traverse them.</p><a href=\"https://www.google.com/search?q=Depth+First+Search\" class=\"card-link\" target=\"_blank\" rel=\"noreferrer noopener\">Google</a>",
   SP: "<h5 class=\"card-title\">Dijkstra's algorithm</h5><p class=\"card-text\">Dijkstra's algorithm solves the problem of finding the shortest path from a point in a graph (the source) to a destination. The graph representing all the paths from one vertex to all the others must be a spanning tree - it must include all vertices. There will also be no cycles as a cycle would define more than one path from the selected vertex to at least one other vertex. The steps for implementing Dijkstra’s algorithm are as follows: <ol><li>Mark your selected initial node with a current distance of 0 and the rest with infinity.</li><li> Set the non-visited node with the smallest current distance as the current node C.</li><li> For each neighbour N of your current node C: add the current distance of C with the weight of the edge connecting C-N.</li><li> If it's smaller than the current distance of N, set it as the new current distance of N. Mark the current node C as visited.</li><li>If there are non-visited nodes, go to step 2.</li></ol><a href=\"https://www.google.com/search?q=Dijkstra+algorithm\" class=\"card-link\" target=\"_blank\" rel=\"noreferrer noopener\">Google</a>",
   MST: "<h5 class=\"card-title\">Kruskal's algorithm</h5><p class=\"card-text\">Kruskal's algorithm to find the minimum cost spanning tree uses the greedy approach. This algorithm treats the graph as a forest and every node it has as an individual tree. A tree connects to another only and only if, it has the least cost among all available options and does not violate MST properties. The steps for implementing Kruskal's algorithm are as follows:<ol><li> Sort all the edges from low weight to high.</li><li> Take the edge with the lowest weight and add it to the spanning tree.</li><li> If adding the edge created a cycle, then reject this edge.</li><li> Keep adding edges until we reach all vertices.</li></ol></p><a href=\"https://www.google.com/search?q=Kruskal+algorithm\" class=\"card-link\" target=\"_blank\" rel=\"noreferrer noopener\">Google</a>",
-  CD: "<h6 class=\"card-subtitle mb-2 text-muted text-center\" rel=\"noreferrer noopener\">To decide if directed or not</h6>"
+  CD: "<h5 class=\"card-title\">Cycle Detection</h5><p class=\"card-text\">Run a DFS from every unvisited node. Depth First Traversal can be used to detect a cycle in a Graph. DFS for a connected graph produces a tree. There is a cycle in a graph only if there is a back edge present in the graph. A back edge is an edge that is joining a node to itself (self-loop) or one of its ancestor in the tree produced by DFS. To find the back edge to any of its ancestor keep a visited array and if there is a back edge to any visited node then there is a loop and return true.</h6>"
+  
 }
 
 const algoBlankDict = {
@@ -145,6 +199,8 @@ const algoAnsDict = {
   CD: "<h6 class=\"card-subtitle mb-2 text-muted text-center\" rel=\"noreferrer noopener\">To decide if directed or not</h6>"
 }
 
+
+// Function for changing algorithms
 function changeAlgo() {
   var algorithms = document.getElementById('algorithms').value;
   var algoDesc = document.getElementById('algoDesc');
@@ -168,6 +224,7 @@ function changeAlgo() {
   }
 }
 
+
 // Reset for description boxes
 function resetDesc() {
   graphDesc.innerHTML = graphDescDict["None"];
@@ -178,6 +235,7 @@ function resetDesc() {
 
 
 // SLideshow functions
+// TODO incorporate backend
 var x = false
 var speed = 2000
 var path = "assets\\img\\slideshow\\"
