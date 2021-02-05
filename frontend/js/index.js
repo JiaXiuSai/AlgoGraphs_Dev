@@ -13,8 +13,10 @@ inputForm.addEventListener('submit', function (event) {
     }
     var graph = document.getElementById('graph').value;
     var nodes = document.getElementById("nodes").value;
-    var error = document.getElementById('error-nodes');
-    var algorithms = document.getElementById('algorithms').value;
+    var algorithms = document.getElementById('algorithms').value;    
+    var error_nodes = document.getElementById('error-nodes');
+    var error_graphs = document.getElementById('error-graphs');
+
 
     if (graph == 'Custom') {
 
@@ -57,21 +59,26 @@ inputForm.addEventListener('submit', function (event) {
     }
     if (isNaN(nodes)) {
       if (graph == 'Hypercubes') {
-        error.innerHTML = "Must be 1,4 or 8 nodes for hypercube";
+        error_nodes.innerHTML = "Must be 1,4 or 8 nodes for hypercube";
       } else {
-        error.innerHTML = "Must be between 1 to 10 nodes";
+        error_nodes.innerHTML = "Must be between 1 to 10 nodes";
       }
-      error.classList.add("d-block");
+      error_nodes.classList.add("d-block");
       return
     } else {
       if (graph == 'Hypercubes' && (nodes != '1' || nodes != '4' || nodes != '8')) {
-        error.innerHTML = "Must be 1,4 or 8 nodes for hypercube";
-        error.classList.add("d-block");
+        error_nodes.innerHTML = "Must be 1,4 or 8 nodes for hypercube";
+        error_nodes.classList.add("d-block");
         return
       }
     }
+    if (graph == 'None') {
+      error_graphs.classList.add("d-block");
+      return
+    }
     userInput = [type, graph, nodes, algorithms]
-    error.classList.remove("d-block");
+    error_nodes.classList.remove("d-block");
+    error_graphs.classList.remove("d-block");
     console.log(userInput)
   } catch (error) {
     window.alert(error);
