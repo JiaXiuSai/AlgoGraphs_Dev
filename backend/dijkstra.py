@@ -56,7 +56,7 @@ G=nx.Graph()
 
 for i in range(len(adj)):
     for j in range(len(adj)):
-        while (adj[i][j] != 'inf'):
+        if (adj[i][j] != 'inf'):
            G.add_edge(i,j,weight= adj[i][j])
 
 
