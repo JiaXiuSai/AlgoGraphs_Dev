@@ -2,6 +2,9 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import random
 
+#note for mitchell
+#for capturing the order of the images (and the right number), may need to return the order (in search algs)to
+#ensure the right amount of images are collected
 """
 all these added below
 
