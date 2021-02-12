@@ -2,8 +2,6 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import random
 
-
-
 """
 all these added below
 
@@ -21,7 +19,7 @@ all these added below
 2. dfs
 3. dijkstra
 4. kruskal --- nope
-5. cycle
+5. cycle det
 
 
 need adding/doing: temporal
@@ -49,11 +47,9 @@ def cycle(numNodes):
     G.add_edge(0,numNodes-1)
     G.add_nodes_from(G.nodes(), colour='never coloured')
     positions = nx.spring_layout(G)
-    nx.draw(G, pos=positions,node_color='grey')
-    #nx.draw_networkx_labels(G, pos=positions)
+    nx.draw(G, pos=positions,node_color='white')
     nx.draw_networkx_labels(G, pos=positions,labels={n: n+1 for n in G})
     plt.savefig((str(numNodes)+"cycle.png"), dpi=300)
-    #plt.show()
     adjlist=[]
     x = nx.convert.to_dict_of_lists(G)
     for i in x.values():
@@ -78,34 +74,25 @@ def star(numNodes):
     G.add_nodes_from(G.nodes(), colour='never coloured')
     positions = nx.spring_layout(G)
     nx.draw(G, pos=positions,node_color='white')
-    #nx.draw_networkx_labels(G, pos=positions)
     nx.draw_networkx_labels(G, pos=positions,labels={n: n+1 for n in G})
-    
     plt.savefig((str(numNodes)+"star.png"), dpi=300)
-    #plt.show()
-
     adjlist=[]
     x = nx.convert.to_dict_of_lists(G)
     for i in x.values():
         adjlist.append(i)
-    
     return adjlist,G,positions
 
 
 def tree(numNodes):
     plt.clf()
     G= nx.Graph()
-    
     if numNodes == 1:
         G4.add_node(0)
-
     elif numNodes > 1:
         G.add_node(0)
         for i in range(1,numNodes):
             G.add_node(i)
-
             prob = random.uniform(0,1)
-
             if prob>0.5:
                 randy = random.randint(0,i-1)
                 G.add_edge(randy,i)
@@ -114,16 +101,13 @@ def tree(numNodes):
         
     G.add_nodes_from(G.nodes(), colour='never coloured')
     positions = nx.spring_layout(G)
-    nx.draw(G, pos=positions,node_color='grey')
+    nx.draw(G, pos=positions,node_color='white')
     nx.draw_networkx_labels(G, pos=positions,labels={n: n+1 for n in G})
-    #nx.draw_networkx_labels(G, pos=positions)
     plt.savefig((str(numNodes)+"tree.png"), dpi=300)
-    #plt.show()
     adjlist=[]
     x = nx.convert.to_dict_of_lists(G)
     for i in x.values():
         adjlist.append(i)
-    
     return adjlist,G,positions
 
 def path(numNodes):
@@ -131,7 +115,6 @@ def path(numNodes):
     G= nx.Graph()
     if numNodes == 1:
         G.add_node(0)
-
     elif numNodes > 1:
         G.add_node(0)
         for i in range(0,numNodes-1):
@@ -140,17 +123,14 @@ def path(numNodes):
 
     G.add_nodes_from(G.nodes(), colour='never coloured')
     positions = nx.spring_layout(G)
-    nx.draw(G, pos=positions,node_color='grey')
-    #nx.draw_networkx_labels(G, pos=positions)
+    nx.draw(G, pos=positions,node_color='white')
     nx.draw_networkx_labels(G, pos=positions,labels={n: n+1 for n in G})
     plt.savefig((str(numNodes)+"path.png"), dpi=300)
-    #plt.show()
     adjlist=[]
     x = nx.convert.to_dict_of_lists(G)
     for i in x.values():
         adjlist.append(i)
     return adjlist,G,positions
-
 
 def complete(numNodes):
     plt.clf()
@@ -162,24 +142,19 @@ def complete(numNodes):
         G.add_node(0)
         for i in range(1,numNodes):
             G.add_node(i)
-
             for j in range(0,i):
                 G.add_edge(j,i)
 
     G.add_nodes_from(G.nodes(), colour='never coloured')
     positions = nx.spring_layout(G)
-    nx.draw(G, pos=positions,node_color='grey')
-    #nx.draw_networkx_labels(G, pos=positions)
+    nx.draw(G, pos=positions,node_color='white')
     nx.draw_networkx_labels(G, pos=positions,labels={n: n+1 for n in G})
     plt.savefig((str(numNodes)+"complete.png"), dpi=300)
-    #plt.show()
     adjlist=[]
     x = nx.convert.to_dict_of_lists(G)
     for i in x.values():
         adjlist.append(i)
-  
     return adjlist,G,positions
-
 
 def bipartite(numNodes):
     plt.clf()
@@ -195,7 +170,6 @@ def bipartite(numNodes):
         odds.append(i+1)
         B.add_node(i+1)
         colours.append('blue')
-
     for i in range(0,numNodes-1):
         B.add_edge(i,i+1)
 
@@ -211,17 +185,13 @@ def bipartite(numNodes):
 
     lhs = nx.bipartite.sets(B)[0]
     positions = nx.bipartite_layout(B, lhs,scale=40)
-    #positions = nx.spring_layout(B,scale=40)
     nx.draw_networkx_labels(B, pos=positions,labels={n: n+1 for n in B})
-    #nx.draw_networkx_labels(B, pos=positions)
     nx.draw(B, pos=positions,node_color=colours)
     plt.savefig((str(numNodes)+"bipartite.png"), dpi=300)
-    #plt.show()
     adjlist=[]
     x = nx.convert.to_dict_of_lists(B)
     for i in x.values():
         adjlist.append(i)
-  
     return adjlist,B,positions
 
 
@@ -230,8 +200,6 @@ def hypercube(n):
     if n==0:
         x= nx.Graph()
         x.add_node(0)
-        
-    #else:
     elif n==4:
         x= nx.Graph()
         for i in range(0,2**n):
@@ -303,38 +271,31 @@ def hypercube(n):
             x.add_node(i)
         x.add_edge(0,1)
         
-    #x=nx.generators.lattice.hypercube_graph(n)
     positions = nx.spring_layout(x, scale=0.8)
-    nx.draw(x, pos=positions,node_color='grey', width=1, edge_color="skyblue", style="solid")
+    nx.draw(x, pos=positions,node_color='white', width=1, edge_color="black", style="solid")
     nx.draw_networkx_labels(x, pos=positions,labels={u: u+1 for u in x})
 
     #fits everything in
     plt.margins(0.15)
     plt.savefig((str(n)+"hypercube.png"), dpi=800)#,figsize=(10.0,10.0))
-    #plt.show()
 
     adjlist=[]
     h = nx.convert.to_dict_of_lists(x)
     for i in h.values():
         adjlist.append(i)
-
     return adjlist,x,positions
 
 def petersen():
     plt.clf()
     Graph = nx.petersen_graph()
-    
     nx.draw_shell(Graph, nlist=[range(5, 10), range(5)],  font_weight='bold',node_color='white')
     positions = nx.shell_layout(Graph, nlist=[range(5, 10), range(5)])
     nx.draw_networkx_labels(Graph, pos=positions,labels={n: n+1 for n in Graph})
-    #print(pos)
     plt.savefig(("petersen.png"), dpi=800)
-    #plt.show()
     adjlist=[]
     x = nx.convert.to_dict_of_lists(Graph)
     for i in x.values():
         adjlist.append(i)
-  
     return adjlist,Graph,positions
 
 
@@ -342,32 +303,24 @@ def petersen():
 def custom(adj):
     plt.clf()
     G= nx.Graph()
-
     for i in range(0,len(adj)):
         G.add_node(i)
-
     for i in range(0,len(adj)):
         for j in range(0,len(adj[i])):
             if(adj[i][j]==1):
                 G.add_edge(i,j)
-
     G.add_nodes_from(G.nodes(), colour='never coloured')
     positions = nx.spring_layout(G)
     nx.draw(G, pos=positions,node_color='white')
     nx.draw_networkx_labels(G, pos=positions,labels={n: n+1 for n in G})
-
-    #nx.draw_networkx_labels(G, pos=positions)
-    
     plt.savefig((str(len(adj))+"custom.png"), dpi=300)
-    #plt.show()
     adjlist=[]
     x = nx.convert.to_dict_of_lists(G)
     for i in x.values():
         adjlist.append(i)
-  
     return adjlist,G,positions
 
-def cycleDetection(G,positions):
+def cycleDetection(adjlist,G,positions):
     plt.clf()
     x=[]        
     try:
@@ -375,37 +328,18 @@ def cycleDetection(G,positions):
     except:
         pass
 
-    if(x):
-        print((nx.find_cycle(G, orientation="ignore")))
-        
-        print(True)
-    else:
-        print(True)
     G.add_nodes_from(G.nodes(), colour='never coloured')
 
     for e in G.edges():
-            print(e)
+            #print(e)
             G[e[0]][e[1]]['color'] = 'black'
             for i in x:
                 if(((e[0]==i[0])and(e[1]==i[1]))or((e[1]==i[0])and(e[0]==i[1]))):
-                    print(i[0],e[0],i[1],e[1])
+                    #print(i[0],e[0],i[1],e[1])
                     G[e[0]][e[1]]['color'] = 'red'
 
-    node_colour_list=[]
-
-    #colour nodes that are in the cycle
-    for e in G.nodes():
-            print(e)
-            coloured=False
-            for i in x:
-                if((e==i[0])):
-                    node_colour_list.append('pink')
-                    coloured=True
-                    break
-            if(coloured==False):
-                node_colour_list.append('white')
-                
-    #positions = nx.spring_layout(G)
+    node_colour_list=['white']*len(adjlist)
+    order=0
     edge_colour_list = [G[e[0]][e[1]]['color'] for e in G.edges()]
     nx.draw(G, pos=positions,node_color=node_colour_list,edge_color=edge_colour_list)
     #nx.draw_networkx_labels(G, pos=positions)
@@ -413,10 +347,31 @@ def cycleDetection(G,positions):
         nx.draw_networkx_labels(G, pos=positions,labels={n: n+1 for n in G})
     except:
         nx.draw_networkx_labels(G, pos=positions)
-    plt.savefig((str(len(node_colour_list))+"cycledetection.png"), dpi=300)
+    plt.savefig((str(order)+"cycledetection.png"), dpi=300)
+    #colour nodes that are in the cycle
+    order+=1
+    for e in G.nodes():
+            #print(e)
+            coloured=False
+            for i in x:
+                if((e==i[0])):
+                    node_colour_list[e]='pink'
+                    coloured=True
+                    break
+            if(coloured==False):
+                node_colour_list[e]='white'
+            else:
+                #positions = nx.spring_layout(G)
+                edge_colour_list = [G[e[0]][e[1]]['color'] for e in G.edges()]
+                nx.draw(G, pos=positions,node_color=node_colour_list,edge_color=edge_colour_list)
+                #nx.draw_networkx_labels(G, pos=positions)
+                try:
+                    nx.draw_networkx_labels(G, pos=positions,labels={n: n+1 for n in G})
+                except:
+                    nx.draw_networkx_labels(G, pos=positions)
+                plt.savefig((str(order)+"cycledetection.png"), dpi=300)
+                order+=1
         
-    
-    
 def bfs(adjlist,G,positions):
     print(adjlist)
 
@@ -426,24 +381,6 @@ def bfs(adjlist,G,positions):
     tour=[0]
     r=0
     queue.extend(adjlist[0])#=adjlist[0]
-
-##    #keeps track of which index of colourList we are allowed to colour the node in
-##    colourCount=0
-##    colourList=['orange','blue','yellow','red','purple','grey','pink','green','grey']
-##
-##    #initialise an all white list for the nodes that have not yet been coloured
-##    #will get coloured as we go on
-##    vColour=['#ffffff']*len(adjlist)
-##
-##    #draws first stage and saves (non coloured graph)
-##    nx.draw(G, pos=positions,node_color=vColour)
-##    #nx.draw_networkx_labels(G, pos=positions)
-##    order=0
-##    plt.savefig((str(order)+"bfs.png"), dpi=300)
-
-##    #adds orange to first node 0 (which is node 1 on networkx graph)
-##    vColour[0]=colourList[colourCount]
-##    colourCount+=1
 
     #keeps track of which index of colourList we are allowed to colour the node in
     colourCount=0
@@ -609,18 +546,16 @@ def dijkstra(adjlist,graph,positions,source,target):
     plt.savefig((str(order)+"dijkstra.png"), dpi=300)
     plt.show()
 
-    print('*')
-    print(distance)
-    print(shortest_distance)
-    print(parent)
-    print(target)
+##    print('*')
+##    print(distance)
+##    print(shortest_distance)
+##    print(parent)
+##    print(target)
     
     for i in shortpath:
         colours[i]='orange'
         order+=1
         nx.draw(graph, pos=positions,node_color=colours)
-        #nx.draw(graph,pos=positions,node_color=colours, width=1, style="solid" )
-        #nx.draw_networkx_labels(graph, pos=positions)
         try:
             nx.draw_networkx_labels(graph, pos=positions,labels={n: n+1 for n in graph})
         except:
