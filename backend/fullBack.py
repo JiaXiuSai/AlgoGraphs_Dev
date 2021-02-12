@@ -17,16 +17,14 @@ all these added below
 8. petersen
 9. custom
 
-
-
 1. bfs
 2. dfs
 3. dijkstra
-4. kruskal
+4. kruskal --- nope
 5. cycle
 
 
-need adding/doing: dijkstra, kruskal, temporal
+need adding/doing: temporal
 
 !!!!!!!!!!temporal!!!!!!!!!
 
@@ -326,7 +324,7 @@ def petersen():
     plt.clf()
     Graph = nx.petersen_graph()
     
-    nx.draw_shell(Graph, nlist=[range(5, 10), range(5)],  font_weight='bold',node_color='grey')
+    nx.draw_shell(Graph, nlist=[range(5, 10), range(5)],  font_weight='bold',node_color='white')
     positions = nx.shell_layout(Graph, nlist=[range(5, 10), range(5)])
     nx.draw_networkx_labels(Graph, pos=positions,labels={n: n+1 for n in Graph})
     #print(pos)
@@ -559,3 +557,73 @@ def dfs(adjlist,G,positions):
         for node in adjlist[s]: 
             if (not visited[node]): 
                 stack.append(node)
+
+def backtrace(parent, start, end):
+    path = [end]
+    while path[-1] != start:
+        path.append(parent[path[-1]])
+    path.reverse()
+    return path
+
+def dijkstra(adjlist,graph,positions,source,target):
+    source=source-1
+    target=target-1
+    queue = []
+    visited = {}
+    distance = {}
+    shortest_distance = {}
+    parent = {}
+
+    colours=['white']*len(adjlist)
+
+    for node in range(len(graph)):
+        distance[node] = None
+        visited[node] = False
+        parent[node] = None
+        shortest_distance[node] = float("inf")
+
+    queue.append(source)
+    distance[source] = 0
+    while len(queue) != 0:
+        current = queue.pop(0)
+        visited[current] = True
+        if current == target:
+            shortpath = (backtrace(parent, source, target))
+            print('s',shortpath)
+            #break
+        for neighbor in graph[current]:
+            if visited[neighbor] == False:
+                distance[neighbor] = distance[current] + 1
+                if distance[neighbor] < shortest_distance[neighbor]:
+                    shortest_distance[neighbor] = distance[neighbor]
+                    parent[neighbor] = current
+                    queue.append(neighbor)
+
+    nx.draw(graph,pos=positions,node_color='white', width=1, style="solid" )
+    #nx.draw_networkx_labels(graph, pos=positions, font_size=10)
+    try:
+        nx.draw_networkx_labels(graph, pos=positions,labels={n: n+1 for n in graph})
+    except:
+        nx.draw_networkx_labels(graph, pos=positions)
+    order=0
+    plt.savefig((str(order)+"dijkstra.png"), dpi=300)
+    plt.show()
+
+    print('*')
+    print(distance)
+    print(shortest_distance)
+    print(parent)
+    print(target)
+    
+    for i in shortpath:
+        colours[i]='orange'
+        order+=1
+        nx.draw(graph, pos=positions,node_color=colours)
+        #nx.draw(graph,pos=positions,node_color=colours, width=1, style="solid" )
+        #nx.draw_networkx_labels(graph, pos=positions)
+        try:
+            nx.draw_networkx_labels(graph, pos=positions,labels={n: n+1 for n in graph})
+        except:
+            nx.draw_networkx_labels(graph, pos=positions)
+        plt.savefig((str(order)+"dijkstra.png"), dpi=300)
+        plt.show()
