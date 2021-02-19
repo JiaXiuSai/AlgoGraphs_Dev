@@ -8,8 +8,10 @@ import random
 #ensure the right amount of images are collected
 
 #ask jacob
-#hyperecube n currently dimension, ask jacob how he is doing in front end, may need to send down the sq rooted version
+#hypercube n currently dimension, ask jacob how he is doing in front end, may need to send down the sq rooted version
 # or change the for loops from 2**n to n
+
+#hypercube 4 is still an option 16
 """
 all these added below
 
@@ -26,8 +28,7 @@ all these added below
 1. bfs
 2. dfs
 3. dijkstra
-4. kruskal --- nope
-5. cycle det
+4. cycle det
 
 
 need adding/doing: temporal
@@ -277,8 +278,7 @@ def hypercube(n):
 
     #fits everything in
     plt.margins(0.15)
-    plt.savefig((str(n)+"hypercube.png"), dpi=800)#,figsize=(10.0,10.0))
-
+    plt.savefig((str(n)+"hypercube.png"), dpi=800)
     adjlist=[]
     h = nx.convert.to_dict_of_lists(x)
     for i in h.values():
@@ -421,10 +421,8 @@ def bfs(adjlist,G,positions):
             if vColour[i]=='#ffffff':
                 vColour[i]=colourList[colourCount]
                 nx.draw(G, pos=positions,node_color=vColour)
-                #nx.draw_networkx_labels(G, pos=positions)
                 plt.savefig((str(order)+"bfs.png"), dpi=300)
                 order+=1
-                #plt.show()
         
         colourCount+=1
         queue.remove(r)
@@ -434,12 +432,10 @@ def bfs(adjlist,G,positions):
             for i in range(0,len(adjlist[x])):#and (x not in tour)
                 if(visited[adjlist[x][i]]==0 and (adjlist[x][i] not in queue)):
                         queue.append(adjlist[x][i])
-    return tour
 
 def dfs(adjlist,G,positions):
     #keeps track of which index of colourList we are allowed to colour the node in
     colourCount=0
-    
     colourList=['orange','blue','yellow','red','purple','grey','pink','green','grey']
 
     #initialise an all white list for the nodes that have not yet been coloured
@@ -466,18 +462,14 @@ def dfs(adjlist,G,positions):
         s = stack[-1] 
         stack.pop()
 
-        # Stack may contain same vertex twice. So 
-        # we need to print the popped item only 
-        # if it is not visited. 
+        # stack may contain same vertex twice, need to print the popped item only 
+        # if not visited. 
         if (not visited[s]): 
-            #print(s,'\n')
             vColour[s]=colourList[colourCount]
             nx.draw(G, pos=positions,node_color=vColour)
-            #nx.draw_networkx_labels(G, pos=positions)
             plt.savefig((str(order)+"dfs.png"), dpi=300)
             order+=1
             visited[s] = True
-        #print(vColour)
         # Get all adjacent vertices of the popped vertex s 
         # If a adjacent has not been visited, then push it 
         # to the stack. 
@@ -485,6 +477,7 @@ def dfs(adjlist,G,positions):
             if (not visited[node]): 
                 stack.append(node)
 
+#used for dijkstra
 def backtrace(parent, start, end):
     path = [end]
     while path[-1] != start:
