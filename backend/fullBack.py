@@ -3,8 +3,13 @@ import matplotlib.pyplot as plt
 import random
 
 #note for mitchell
-#for capturing the order of the images (and the right number), may need to return the order (in search algs)to
+#for capturing the order of the images (and the right number), may
+#need to return the order (in search algs) to
 #ensure the right amount of images are collected
+
+#ask jacob
+#hyperecube n currently dimension, ask jacob how he is doing in front end, may need to send down the sq rooted version
+# or change the for loops from 2**n to n
 """
 all these added below
 
@@ -31,14 +36,10 @@ need adding/doing: temporal
 
 """
 
-
-#ADD POSITIONS AS PARAMETERS AND RETURNS SO THE GRAPH LOOKS CONSISTENT
-
 def cycle(numNodes):
     plt.clf()
     G= nx.Graph()
     
-
     if numNodes == 1:
         G.add_node(0)
 
@@ -64,7 +65,6 @@ def star(numNodes):
     plt.clf()
     G= nx.Graph()
     
-
     if numNodes == 1:
         G.add_node(0)
 
@@ -90,13 +90,13 @@ def tree(numNodes):
     plt.clf()
     G= nx.Graph()
     if numNodes == 1:
-        G4.add_node(0)
+        G.add_node(0)
     elif numNodes > 1:
         G.add_node(0)
         for i in range(1,numNodes):
             G.add_node(i)
             prob = random.uniform(0,1)
-            if prob>0.5:
+            if prob>0.7:
                 randy = random.randint(0,i-1)
                 G.add_edge(randy,i)
             else:
@@ -166,7 +166,7 @@ def bipartite(numNodes):
     colours=[]
     B = nx.Graph()
     for i in range(0,numNodes,2):
-        print(i)
+        #print(i)
         evens.append(i)
         B.add_node(i)
         colours.append('red')
@@ -196,6 +196,7 @@ def bipartite(numNodes):
     for i in x.values():
         adjlist.append(i)
     return adjlist,B,positions
+
 
 
 def hypercube(n):
@@ -376,7 +377,7 @@ def cycleDetection(adjlist,G,positions):
                 order+=1
         
 def bfs(adjlist,G,positions):
-    print(adjlist)
+    #print(adjlist)
 
     #visited list- check if bfs already seen
     visited=[0]*len(adjlist)
@@ -387,7 +388,8 @@ def bfs(adjlist,G,positions):
 
     #keeps track of which index of colourList we are allowed to colour the node in
     colourCount=0
-    colourList=['orange','blue','yellow','red','purple','grey','pink','green','grey']
+    colourList = ['#FFB6C1','#836FFF','#7FFFD4','#7D9EC0','#CAE1FF','#458B00','#FFFF00','#FFA07A','#F5DEB3','#FF3030','#CDC9C9','#EE7AE9','#A0522D','#00EE00','#FF9912','#E3CF57','#B3EE3A','#FF3E96','#00F5FF','#BF3EFF','#4876FF']
+    #colourList=['orange','blue','yellow','red','purple','cyan','pink','green','grey','indigo']
 
     #initialise an all white list for the nodes that have not yet been coloured
     #will get coloured as we go on
@@ -410,8 +412,8 @@ def bfs(adjlist,G,positions):
     plt.savefig((str(order)+"bfs.png"), dpi=300)
 
     order=2
-    print(queue)
-    print(adjlist)
+##    print(queue)
+##    print(adjlist)
     while(len(queue)!=0):
         a=len(queue)
         secondq=[]
@@ -443,14 +445,15 @@ def bfs(adjlist,G,positions):
             for i in range(0,len(adjlist[x])):#and (x not in tour)
                 if(visited[adjlist[x][i]]==0 and (adjlist[x][i] not in queue)):
                         queue.append(adjlist[x][i])
-        print(queue)
-        print(adjlist)
-    print(vColour)
+##        print(queue)
+##        print(adjlist)
+##    print(vColour)
     return tour
 
 def dfs(adjlist,G,positions):
     #keeps track of which index of colourList we are allowed to colour the node in
     colourCount=0
+    
     colourList=['orange','blue','yellow','red','purple','grey','pink','green','grey']
 
     #initialise an all white list for the nodes that have not yet been coloured
@@ -467,8 +470,6 @@ def dfs(adjlist,G,positions):
     vColour[0]=colourList[colourCount]
 
     order=1
-
-    
     visited = [False] * len(adjlist)
     s=0
     stack = [] 
@@ -483,14 +484,14 @@ def dfs(adjlist,G,positions):
         # we need to print the popped item only 
         # if it is not visited. 
         if (not visited[s]): 
-            print(s,'\n')
+            #print(s,'\n')
             vColour[s]=colourList[colourCount]
             nx.draw(G, pos=positions,node_color=vColour)
             #nx.draw_networkx_labels(G, pos=positions)
             plt.savefig((str(order)+"dfs.png"), dpi=300)
             order+=1
             visited[s] = True
-        print(vColour)
+        #print(vColour)
         # Get all adjacent vertices of the popped vertex s 
         # If a adjacent has not been visited, then push it 
         # to the stack. 
@@ -529,8 +530,7 @@ def dijkstra(adjlist,graph,positions,source,target):
         visited[current] = True
         if current == target:
             shortpath = (backtrace(parent, source, target))
-            print('s',shortpath)
-            #break
+            #print('s',shortpath)
         for neighbor in graph[current]:
             if visited[neighbor] == False:
                 distance[neighbor] = distance[current] + 1
@@ -540,7 +540,6 @@ def dijkstra(adjlist,graph,positions,source,target):
                     queue.append(neighbor)
 
     nx.draw(graph,pos=positions,node_color='white', width=1, style="solid" )
-    #nx.draw_networkx_labels(graph, pos=positions, font_size=10)
     try:
         nx.draw_networkx_labels(graph, pos=positions,labels={n: n+1 for n in graph})
     except:
@@ -548,12 +547,6 @@ def dijkstra(adjlist,graph,positions,source,target):
     order=0
     plt.savefig((str(order)+"dijkstra.png"), dpi=300)
     plt.show()
-
-##    print('*')
-##    print(distance)
-##    print(shortest_distance)
-##    print(parent)
-##    print(target)
     
     for i in shortpath:
         colours[i]='orange'
@@ -565,3 +558,6 @@ def dijkstra(adjlist,graph,positions,source,target):
             nx.draw_networkx_labels(graph, pos=positions)
         plt.savefig((str(order)+"dijkstra.png"), dpi=300)
         plt.show()
+
+
+
