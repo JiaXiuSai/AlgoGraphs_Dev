@@ -39,7 +39,6 @@ need adding/doing: temporal
 def cycle(numNodes):
     plt.clf()
     G= nx.Graph()
-    
     if numNodes == 1:
         G.add_node(0)
 
@@ -64,7 +63,6 @@ def cycle(numNodes):
 def star(numNodes):
     plt.clf()
     G= nx.Graph()
-    
     if numNodes == 1:
         G.add_node(0)
 
@@ -138,7 +136,6 @@ def path(numNodes):
 def complete(numNodes):
     plt.clf()
     G= nx.Graph()
-    
     if numNodes == 1:
         G.add_node(0)
     elif numNodes > 1:
@@ -165,14 +162,15 @@ def bipartite(numNodes):
     evens=[]
     colours=[]
     B = nx.Graph()
-    for i in range(0,numNodes,2):
-        #print(i)
-        evens.append(i)
-        B.add_node(i)
-        colours.append('red')
-        odds.append(i+1)
-        B.add_node(i+1)
-        colours.append('blue')
+    for i in range(0,numNodes):
+        if ((i%2)==0):
+            evens.append(i)
+            B.add_node(i)
+            colours.append('red')
+        else:
+            odds.append(i)
+            B.add_node(i)
+            colours.append('blue')
     for i in range(0,numNodes-1):
         B.add_edge(i,i+1)
 
@@ -185,9 +183,8 @@ def bipartite(numNodes):
                 z=random.randint(0, len(odds)-2)
                 if z!=y:
                     B.add_edge(odds[z],evens[y])
-
     lhs = nx.bipartite.sets(B)[0]
-    positions = nx.bipartite_layout(B, lhs,scale=40)
+    positions = nx.bipartite_layout(B, lhs)
     nx.draw_networkx_labels(B, pos=positions,labels={n: n+1 for n in B})
     nx.draw(B, pos=positions,node_color=colours)
     plt.savefig((str(numNodes)+"bipartite.png"), dpi=300)
@@ -196,7 +193,6 @@ def bipartite(numNodes):
     for i in x.values():
         adjlist.append(i)
     return adjlist,B,positions
-
 
 
 def hypercube(n):
@@ -335,11 +331,9 @@ def cycleDetection(adjlist,G,positions):
     G.add_nodes_from(G.nodes(), colour='never coloured')
 
     for e in G.edges():
-            #print(e)
             G[e[0]][e[1]]['color'] = 'black'
             for i in x:
                 if(((e[0]==i[0])and(e[1]==i[1]))or((e[1]==i[0])and(e[0]==i[1]))):
-                    #print(i[0],e[0],i[1],e[1])
                     G[e[0]][e[1]]['color'] = 'red'
 
     node_colour_list=['white']*len(adjlist)
@@ -355,7 +349,6 @@ def cycleDetection(adjlist,G,positions):
     #colour nodes that are in the cycle
     order+=1
     for e in G.nodes():
-            #print(e)
             coloured=False
             for i in x:
                 if((e==i[0])):
@@ -377,8 +370,6 @@ def cycleDetection(adjlist,G,positions):
                 order+=1
         
 def bfs(adjlist,G,positions):
-    #print(adjlist)
-
     #visited list- check if bfs already seen
     visited=[0]*len(adjlist)
     queue=[]
@@ -412,8 +403,6 @@ def bfs(adjlist,G,positions):
     plt.savefig((str(order)+"bfs.png"), dpi=300)
 
     order=2
-##    print(queue)
-##    print(adjlist)
     while(len(queue)!=0):
         a=len(queue)
         secondq=[]
@@ -445,9 +434,6 @@ def bfs(adjlist,G,positions):
             for i in range(0,len(adjlist[x])):#and (x not in tour)
                 if(visited[adjlist[x][i]]==0 and (adjlist[x][i] not in queue)):
                         queue.append(adjlist[x][i])
-##        print(queue)
-##        print(adjlist)
-##    print(vColour)
     return tour
 
 def dfs(adjlist,G,positions):
@@ -516,7 +502,6 @@ def dijkstra(adjlist,graph,positions,source,target):
     parent = {}
 
     colours=['white']*len(adjlist)
-
     for node in range(len(graph)):
         distance[node] = None
         visited[node] = False
@@ -530,7 +515,6 @@ def dijkstra(adjlist,graph,positions,source,target):
         visited[current] = True
         if current == target:
             shortpath = (backtrace(parent, source, target))
-            #print('s',shortpath)
         for neighbor in graph[current]:
             if visited[neighbor] == False:
                 distance[neighbor] = distance[current] + 1
@@ -546,7 +530,6 @@ def dijkstra(adjlist,graph,positions,source,target):
         nx.draw_networkx_labels(graph, pos=positions)
     order=0
     plt.savefig((str(order)+"dijkstra.png"), dpi=300)
-    plt.show()
     
     for i in shortpath:
         colours[i]='orange'
@@ -557,7 +540,4 @@ def dijkstra(adjlist,graph,positions,source,target):
         except:
             nx.draw_networkx_labels(graph, pos=positions)
         plt.savefig((str(order)+"dijkstra.png"), dpi=300)
-        plt.show()
-
-
-
+      
