@@ -102,6 +102,11 @@ function upNodes(max) {
     if (document.getElementById("nodes").value == "NaN") {
       document.getElementById("nodes").value = max;
     }
+    if (document.getElementById('graph').value == "Custom") {
+      graphDesc.innerHTML = "Select Edges ";
+      var gr = createGrid(document.getElementById("nodes").value);
+      document.getElementById('grid').appendChild(gr);
+    }
   }
 }
 
@@ -121,6 +126,11 @@ function downNodes(min) {
     }
     if (document.getElementById("nodes").value == "NaN") {
       document.getElementById("nodes").value = min;
+    }
+    if (document.getElementById('graph').value == "Custom") {
+      graphDesc.innerHTML = "Select Edges ";
+      var gr = createGrid(document.getElementById("nodes").value);
+      document.getElementById('grid').appendChild(gr);
     }
   }
 }
@@ -190,20 +200,20 @@ const algoDescDict = {
 
 const algoBlankDict = {
   None: "<h6 class=\"card-subtitle mb-2 text-muted text-center\">Select an example algorithm to see code</h6>",
-  BFS: "<i>G</i> = graph<br><i>root</i> = starting node<br>BFS(<i>G</i>, <i>root</i>)<br><br>let <i>Q</i> be a queue<br>label <i>root</i> as discovered<br><input><br><br><b>while</b> <i>Q</i>  is not empty <b>do</b><ol><i>v</i> = <i>Q</i>.dequeue()<br><b>if</b> <input> <b>then</b><ol><b>return</b> <i>v</i></ol><b>for all</b> edges from <i>v</i> to <i>w</i> <b>in</b> <i>G</i>.adjacent(<i>v</i>) <b>do</b><ol><b>if</b> <i>w</i> is not labeled as discovered <b>then</b><ol>label <i>w</i> as discovered<br><input><br>",
-  DFS: "<i>G</i> = graph<br><i>v</i> = starting node<br>DFS(<i>G</i>, <i>v</i>)<br><br>label <i>v</i> as discovered<br><br><b>for all</b> <i>v</i> to <i>w</i> <b>in</b> <i>G</i>.adjacent(<i>v</i>) <b>do</b><ol><b>if</b> vertex <i>w</i> is not labeled as discovered <b>then</b><ol><input><br>",
-  SP: "<i>G</i> = graph<br><i>start</i> = starting node<br>Dijkstra(<i>G</i>, <i>start</i>)<br><br>let <i>Q</i> be a set of nodes<br><br><b>for each</b> vertex <i>v</i> in <i>G</i> <b>do</b><ol>distance[<i>v</i>] = infinity<br>prev[<i>v</i>] = undefined<br>add <i>v</i> to <i>Q</i></ol><input><br><br><b>while</b> <input> <b>do</b><ol><i>u</i> = vertex in <i>Q</i> with minimum distance[<i>u</i>]<br>remove <i>u</i> from <i>Q</i><br><b>for each</b> neighbor <i>v</i> of <i>u</i> <b>do</b><ol><i>compare</i> = <input><br><b>if</b> <i>compare</i> < distance[<i>v</i>] <b>do</b><ol>distance[<i>v</i>] = <i>compare</i><br>prev[<i>v</i>] = <i>u</i></ol></ol></ol><b>return</b> distance[], prev[]<br>",
-  MST: "<i>G</i> = graph<br>Kruskal(<i>G</i>)<br><br>let <i>F</i> be a set of edges<br><br><b>for each</b> (<i>u</i>, <i>v</i>) <b>in</b> <i>G</i>.edges ordered by <input> <b>do</b><ol><b>if</b> (<i>u</i>, <i>v</i>) <input> <b>then</b><ol>add (<i>u</i>, <i>v</i>) to <i>F</i></ol></ol><b>return</b> <i>F</i><br>",
-  CD: "<h6 class=\"card-subtitle mb-2 text-muted text-center\" rel=\"noreferrer noopener\">To decide if directed or not</h6>"
+  BFS: "<i>G</i> = graph<br><i>root</i> = starting node<br>BFS(<i>G</i>, <i>root</i>)<br><br>let <i>Q</i> be a queue<br>label <i>root</i> as discovered<br><input><br><br><b>while</b> <i>Q</i>  is not empty <b>do</b><ol><i>v</i> = <i>Q</i>.dequeue()<br><b>if</b> <input> <b>then</b><ol><b>return</b> <i>v</i></ol><b>for all</b> edges from <i>v</i> to <i>w</i> <b>in</b> <i>G</i>.adjacent(<i>v</i>) <b>do</b><ol><b>if</b> <i>w</i> is not labeled as discovered <b>then</b><ol>label <i>w</i> as discovered<br><input></ol></ol></ol><br><button id='ansBtn' class='btn btn-outline-dark' onclick='toggle()'>See Answers</button>",
+  DFS: "<i>G</i> = graph<br><i>v</i> = starting node<br>DFS(<i>G</i>, <i>v</i>)<br><br>label <i>v</i> as discovered<br><br><b>for all</b> <i>v</i> to <i>w</i> <b>in</b> <i>G</i>.adjacent(<i>v</i>) <b>do</b><ol><b>if</b> vertex <i>w</i> is not labeled as discovered <b>then</b><ol><input></ol></ol><br><button id='ansBtn' class='btn btn-outline-dark' onclick='toggle()'>See Answers</button>",
+  SP: "<i>G</i> = graph<br><i>start</i> = starting node<br>Dijkstra(<i>G</i>, <i>start</i>)<br><br>let <i>Q</i> be a set of nodes<br><br><b>for each</b> vertex <i>v</i> in <i>G</i> <b>do</b><ol>distance[<i>v</i>] = infinity<br>prev[<i>v</i>] = undefined<br>add <i>v</i> to <i>Q</i></ol><input><br><br><b>while</b> <input> <b>do</b><ol><i>u</i> = vertex in <i>Q</i> with minimum distance[<i>u</i>]<br>remove <i>u</i> from <i>Q</i><br><b>for each</b> neighbor <i>v</i> of <i>u</i> <b>do</b><ol><i>compare</i> = <input><br><b>if</b> <i>compare</i> < distance[<i>v</i>] <b>do</b><ol>distance[<i>v</i>] = <i>compare</i><br>prev[<i>v</i>] = <i>u</i></ol></ol></ol><b>return</b> distance[], prev[]<br><br><br><button id='ansBtn' class='btn btn-outline-dark' onclick='toggle()'>See Answers</button>",
+  MST: "<i>G</i> = graph<br>Kruskal(<i>G</i>)<br><br>let <i>F</i> be a set of edges<br><br><b>for each</b> (<i>u</i>, <i>v</i>) <b>in</b> <i>G</i>.edges ordered by <input> <b>do</b><ol><b>if</b> (<i>u</i>, <i>v</i>) <input> <b>then</b><ol>add (<i>u</i>, <i>v</i>) to <i>F</i></ol></ol><b>return</b> <i>F</i><br><br><br><button id='ansBtn' class='btn btn-outline-dark' onclick='toggle()'>See Answers</button>",
+  CD: "<i>G</i> = graph<br><i>v</i> = any vertex in <i>G</i><br><br><b>if</b> <input> finds edge that points to <input> <b>then</b><ol><b>return</b> true</ol><br><button id='ansBtn' class='btn btn-outline-dark' onclick='toggle()'>See Answers</button>"
 }
 
 const algoAnsDict = {
   None: "<h6 class=\"card-subtitle mb-2 text-muted text-center\">Select an example algorithm to see code</h6>",
-  BFS: "<i>G</i> = graph<br><i>root</i> = starting node<br>BFS(<i>G</i>, <i>root</i>)<br><br>let <i>Q</i> be a queue<br>label <i>root</i> as discovered<br><i>Q</i>.enqueue(<i>root</i>)<br><br><b>while</b> <i>Q</i>  is not empty <b>do</b><ol><i>v</i> = <i>Q</i>.dequeue()<br><b>if</b> <i>v</i> is the goal <b>then</b><ol><b>return</b> <i>v</i></ol><b>for all</b> edges from <i>v</i> to <i>w</i> <b>in</b> <i>G</i>.adjacent(<i>v</i>) <b>do</b><ol><b>if</b> <i>w</i> is not labeled as discovered <b>then</b><ol>label <i>w</i> as discovered<br><i>Q</i>.enqueue(<i>w</i>)",
-  DFS: "<i>G</i> = graph<br><i>v</i> = starting node<br>DFS(<i>G</i>, <i>v</i>)<br><br>label <i>v</i> as discovered<br><br><b>for all</b> <i>v</i> to <i>w</i> <b>in</b> <i>G</i>.adjacent(<i>v</i>) <b>do</b><ol><b>if</b> vertex <i>w</i> is not labeled as discovered <b>then</b><ol>recursively call DFS(<i>G</i>, <i>w</i>)",
-  SP: "<i>G</i> = graph<br><i>start</i> = starting node<br>Dijkstra(<i>G</i>, <i>start</i>)<br><br>let <i>Q</i> be a set of nodes<br><br><b>for each</b> vertex <i>v</i> in <i>G</i> <b>do</b><ol>distance[<i>v</i>] = infinity<br>prev[<i>v</i>] = undefined<br>add <i>v</i> to <i>Q</i></ol>distance[<i>start</i>] = 0<br><br><b>while</b> <i>Q</i> is not empty <b>do</b><ol><i>u</i> = vertex in <i>Q</i> with minimum distance[<i>u</i>]<br>remove <i>u</i> from <i>Q</i><br><b>for each</b> neighbor <i>v</i> of <i>u</i> <b>do</b><ol><i>compare</i> = distance[<i>u</i>] + length(<i>u</i>, <i>v</i>)<br><b>if</b> <i>compare</i> < distance[<i>v</i>] <b>do</b><ol>distance[<i>v</i>] = <i>compare</i><br>prev[<i>v</i>] = <i>u</i></ol></ol></ol><b>return</b> distance[], prev[]",
-  MST: "<i>G</i> = graph<br>Kruskal(<i>G</i>)<br><br>let <i>F</i> be a set of edges<br><br><b>for each</b> (<i>u</i>, <i>v</i>) <b>in</b> <i>G</i>.edges ordered by low to high weight <b>do</b><ol><b>if</b> (<i>u</i>, <i>v</i>) does not make a cycle in <i>F</i> <b>then</b><ol>add (<i>u</i>, <i>v</i>) to <i>F</i></ol></ol><b>return</b> <i>F</i>",
-  CD: "<h6 class=\"card-subtitle mb-2 text-muted text-center\" rel=\"noreferrer noopener\">To decide if directed or not</h6>"
+  BFS: "<i>G</i> = graph<br><i>root</i> = starting node<br>BFS(<i>G</i>, <i>root</i>)<br><br>let <i>Q</i> be a queue<br>label <i>root</i> as discovered<br><i>Q</i>.enqueue(<i>root</i>)<br><br><b>while</b> <i>Q</i>  is not empty <b>do</b><ol><i>v</i> = <i>Q</i>.dequeue()<br><b>if</b> <i>v</i> is the goal <b>then</b><ol><b>return</b> <i>v</i></ol><b>for all</b> edges from <i>v</i> to <i>w</i> <b>in</b> <i>G</i>.adjacent(<i>v</i>) <b>do</b><ol><b>if</b> <i>w</i> is not labeled as discovered <b>then</b><ol>label <i>w</i> as discovered<br><i>Q</i>.enqueue(<i>w</i>)</ol></ol></ol><br><button id='ansBtn' class='btn btn-outline-dark' onclick='toggle()'>Hide Answers</button>",
+  DFS: "<i>G</i> = graph<br><i>v</i> = starting node<br>DFS(<i>G</i>, <i>v</i>)<br><br>label <i>v</i> as discovered<br><br><b>for all</b> <i>v</i> to <i>w</i> <b>in</b> <i>G</i>.adjacent(<i>v</i>) <b>do</b><ol><b>if</b> vertex <i>w</i> is not labeled as discovered <b>then</b><ol>recursively call DFS(<i>G</i>, <i>w</i>)</ol></ol><br><button id='ansBtn' class='btn btn-outline-dark' onclick='toggle()'>Hide Answers</button>",
+  SP: "<i>G</i> = graph<br><i>start</i> = starting node<br>Dijkstra(<i>G</i>, <i>start</i>)<br><br>let <i>Q</i> be a set of nodes<br><br><b>for each</b> vertex <i>v</i> in <i>G</i> <b>do</b><ol>distance[<i>v</i>] = infinity<br>prev[<i>v</i>] = undefined<br>add <i>v</i> to <i>Q</i></ol>distance[<i>start</i>] = 0<br><br><b>while</b> <i>Q</i> is not empty <b>do</b><ol><i>u</i> = vertex in <i>Q</i> with minimum distance[<i>u</i>]<br>remove <i>u</i> from <i>Q</i><br><b>for each</b> neighbor <i>v</i> of <i>u</i> <b>do</b><ol><i>compare</i> = distance[<i>u</i>] + length(<i>u</i>, <i>v</i>)<br><b>if</b> <i>compare</i> < distance[<i>v</i>] <b>do</b><ol>distance[<i>v</i>] = <i>compare</i><br>prev[<i>v</i>] = <i>u</i></ol></ol></ol><b>return</b> distance[], prev[]<br><br><br><button id='ansBtn' class='btn btn-outline-dark' onclick='toggle()'>Hide Answers</button>",
+  MST: "<i>G</i> = graph<br>Kruskal(<i>G</i>)<br><br>let <i>F</i> be a set of edges<br><br><b>for each</b> (<i>u</i>, <i>v</i>) <b>in</b> <i>G</i>.edges ordered by low to high weight <b>do</b><ol><b>if</b> (<i>u</i>, <i>v</i>) does not make a cycle in <i>F</i> <b>then</b><ol>add (<i>u</i>, <i>v</i>) to <i>F</i></ol></ol><b>return</b> <i>F</i><br><br><br><button id='ansBtn' class='btn btn-outline-dark' onclick='toggle()'>Hide Answers</button>",
+  CD: "<i>G</i> = graph<br><i>v</i> = any vertex in <i>G</i><br><br><b>if</b> DFS(<i>G</i>, <i>v</i>) finds edge that points to ancestor of current vertex <b>then</b><ol><b>return</b> true</ol><br><button id='ansBtn' class='btn btn-outline-dark' onclick='toggle()'>Hide Answers</button>"
 }
 
 
@@ -215,19 +225,6 @@ function changeAlgo() {
     algoDesc.innerHTML = algoDescDict[algorithms];
   } else {
     algoDesc.innerHTML = algoBlankDict[algorithms];
-    var ansBtn = document.createElement('button');
-    ansBtn.type = "button";
-    ansBtn.className = "btn btn-outline-dark";
-    ansBtn.innerHTML = "See Answers";
-    ansBtn.id = "ansBtn"
-    ansBtn.onclick = function () {
-      if (document.getElementById("ansBtn").innerHTML == "See Answers") {
-        var algorithms = document.getElementById('algorithms').value;
-        var algoDesc = document.getElementById('algoDesc');
-        algoDesc.innerHTML = algoAnsDict[algorithms];
-      }
-    }
-    document.getElementById("algoDesc").appendChild(ansBtn);
   }
 }
 
@@ -399,24 +396,24 @@ function createGrid(nodes) {
 }
 
 
-function codeMode() {
-  if (document.getElementById("codeBtn").innerHTML == "Code") {
-    var ansBtn = document.createElement('button');
-    ansBtn.type = 'button';
-    ansBtn.className = "btn btn-outline-dark";
-    ansBtn.innerHTML = "See Answers";
-    ansBtn.id = "ansBtn"
-    ansBtn.onclick = function () {
-      if (document.getElementById("ansBtn").innerHTML == "See Answers") {
-        var algorithms = document.getElementById('algorithms').value;
-        var algoDesc = document.getElementById('algoDesc');
-        algoDesc.innerHTML = algoAnsDict[algorithms];
-      }
-    }
+function toggle() {
+  var algorithms = document.getElementById('algorithms').value;
+  var algoDesc = document.getElementById('algoDesc');
+  if (document.getElementById("ansBtn").innerHTML == 'See Answers') {
+    algoDesc.innerHTML = algoAnsDict[algorithms];
+  } else {
     var algorithms = document.getElementById('algorithms').value;
     var algoDesc = document.getElementById('algoDesc');
     algoDesc.innerHTML = algoBlankDict[algorithms];
-    document.getElementById("algoDesc").appendChild(ansBtn);
+  }
+}
+
+
+function codeMode() {
+  if (document.getElementById("codeBtn").innerHTML == "Code") {
+    var algorithms = document.getElementById('algorithms').value;
+    var algoDesc = document.getElementById('algoDesc');
+    algoDesc.innerHTML = algoBlankDict[algorithms];
     document.getElementById("codeBtn").innerHTML = "Description";
   } else {
     var algorithms = document.getElementById('algorithms').value;
