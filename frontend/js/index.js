@@ -1,5 +1,4 @@
 // form input and parsing
-// TODO include request sent and receive 
 const inputForm = document.getElementById('userInputForm');
 inputForm.addEventListener('submit', function (event) {
   try {
@@ -13,13 +12,11 @@ inputForm.addEventListener('submit', function (event) {
     }
     var graph = document.getElementById('graph').value;
     var nodes = document.getElementById("nodes").value;
-    var algorithms = document.getElementById('algorithms').value;    
+    var algorithms = document.getElementById('algorithms').value;
     var error_nodes = document.getElementById('error-nodes');
     var error_graphs = document.getElementById('error-graphs');
 
-
     if (graph == 'Custom') {
-
       var matrix = [];
       for (var m = 0; m < nodes; m++) {
         matrix[m] = [];
@@ -59,15 +56,15 @@ inputForm.addEventListener('submit', function (event) {
     }
     if (isNaN(nodes)) {
       if (graph == 'Hypercubes') {
-        error_nodes.innerHTML = "Must be 1,4 or 8 nodes for hypercube";
+        error_nodes.innerHTML = "Must be 1, 2 ,4 or 8 nodes.";
       } else {
         error_nodes.innerHTML = "Must be between 1 to 10 nodes";
       }
       error_nodes.classList.add("d-block");
       return
     } else {
-      if (graph == 'Hypercubes' && (nodes != '1' || nodes != '4' || nodes != '8')) {
-        error_nodes.innerHTML = "Must be 1,4 or 8 nodes for hypercube";
+      if (graph == 'Hypercubes' && (nodes != '1' || nodes != '2' || nodes != '4' || nodes != '8')) {
+        error_nodes.innerHTML = "Must be 1, 2 ,4 or 8 nodes.";
         error_nodes.classList.add("d-block");
         return
       }
@@ -89,10 +86,12 @@ inputForm.addEventListener('submit', function (event) {
 // button control functions for increasing number of nodes nodes
 function upNodes(max) {
   if ('Hypercubes' == document.getElementById("graph").value) {
-    if (document.getElementById("nodes").value < 4) {
+    if (document.getElementById("nodes").value > 3) {
+      document.getElementById("nodes").value = 8
+    } else if (document.getElementById("nodes").value > 1) {
       document.getElementById("nodes").value = 4
     } else {
-      document.getElementById("nodes").value = 8
+      document.getElementById("nodes").value = 2
     }
   } else {
     document.getElementById("nodes").value = parseInt(document.getElementById("nodes").value) + 1;
@@ -114,8 +113,12 @@ function upNodes(max) {
 // button control functions for decreasing number of nodes nodes
 function downNodes(min) {
   if ('Hypercubes' == document.getElementById("graph").value) {
-    if (document.getElementById("nodes").value > 4) {
+    if (document.getElementById("nodes").value > 8) {
+      document.getElementById("nodes").value = 8
+    } else if (document.getElementById("nodes").value > 4) {
       document.getElementById("nodes").value = 4
+    } else if (document.getElementById("nodes").value > 2) {
+      document.getElementById("nodes").value = 2
     } else {
       document.getElementById("nodes").value = 1
     }
@@ -193,9 +196,8 @@ const algoDescDict = {
   BFS: "<h5 class=\"card-title\">Breadth-first search</h5><p class=\"card-text\">Breadth-first search is a graph traversal algorithm that starts traversing the graph from root node and explores all the neighbouring nodes. Then, it selects the nearest node and explores all the unexplored nodes. The algorithm follows the same process for each of the nearest nodes until it finds the goal.</p><a href=\"https://www.google.com/search?q=Breath+First+Search\" class=\"card-link\" target=\"_blank\" rel=\"noreferrer noopener\">Google</a>",
   DFS: "<h5 class=\"card-title\">Depth-first search</h5><p class=\"card-text\">Depth-first search is a graph traversal algorithm that starts traversing the graph from the root node and explores as far as possible along each branch before backtracking. So the basic idea is to start from the root or any arbitrary node and mark the node and move to the adjacent unmarked node and continue this loop until there is no unmarked adjacent node. Then backtrack and check for other unmarked nodes and traverse them.</p><a href=\"https://www.google.com/search?q=Depth+First+Search\" class=\"card-link\" target=\"_blank\" rel=\"noreferrer noopener\">Google</a>",
   SP: "<h5 class=\"card-title\">Dijkstra's algorithm</h5><p class=\"card-text\">Dijkstra's algorithm solves the problem of finding the shortest path from a point in a graph (the source) to a destination. The graph representing all the paths from one vertex to all the others must be a spanning tree - it must include all vertices. There will also be no cycles as a cycle would define more than one path from the selected vertex to at least one other vertex. The steps for implementing Dijkstra’s algorithm are as follows: <ol><li>Mark your selected initial node with a current distance of 0 and the rest with infinity.</li><li> Set the non-visited node with the smallest current distance as the current node C.</li><li> For each neighbour N of your current node C: add the current distance of C with the weight of the edge connecting C-N.</li><li> If it's smaller than the current distance of N, set it as the new current distance of N. Mark the current node C as visited.</li><li>If there are non-visited nodes, go to step 2.</li></ol><a href=\"https://www.google.com/search?q=Dijkstra+algorithm\" class=\"card-link\" target=\"_blank\" rel=\"noreferrer noopener\">Google</a>",
-  MST: "<h5 class=\"card-title\">Kruskal's algorithm</h5><p class=\"card-text\">Kruskal's algorithm to find the minimum cost spanning tree uses the greedy approach. This algorithm treats the graph as a forest and every node it has as an individual tree. A tree connects to another only and only if, it has the least cost among all available options and does not violate MST properties. The steps for implementing Kruskal's algorithm are as follows:<ol><li> Sort all the edges from low weight to high.</li><li> Take the edge with the lowest weight and add it to the spanning tree.</li><li> If adding the edge created a cycle, then reject this edge.</li><li> Keep adding edges until we reach all vertices.</li></ol></p><a href=\"https://www.google.com/search?q=Kruskal+algorithm\" class=\"card-link\" target=\"_blank\" rel=\"noreferrer noopener\">Google</a>",
   CD: "<h5 class=\"card-title\">Cycle Detection</h5><p class=\"card-text\">Run a DFS from every unvisited node. Depth First Traversal can be used to detect a cycle in a Graph. DFS for a connected graph produces a tree. There is a cycle in a graph only if there is a back edge present in the graph. A back edge is an edge that is joining a node to itself (self-loop) or one of its ancestor in the tree produced by DFS. To find the back edge to any of its ancestor keep a visited array and if there is a back edge to any visited node then there is a loop and return true.</h6>"
-  
+
 }
 
 const algoBlankDict = {
@@ -203,7 +205,6 @@ const algoBlankDict = {
   BFS: "<i>G</i> = graph<br><i>root</i> = starting node<br>BFS(<i>G</i>, <i>root</i>)<br><br>let <i>Q</i> be a queue<br>label <i>root</i> as discovered<br><input><br><br><b>while</b> <i>Q</i>  is not empty <b>do</b><ol><i>v</i> = <i>Q</i>.dequeue()<br><b>if</b> <input> <b>then</b><ol><b>return</b> <i>v</i></ol><b>for all</b> edges from <i>v</i> to <i>w</i> <b>in</b> <i>G</i>.adjacent(<i>v</i>) <b>do</b><ol><b>if</b> <i>w</i> is not labeled as discovered <b>then</b><ol>label <i>w</i> as discovered<br><input></ol></ol></ol><br><button id='ansBtn' class='btn btn-outline-dark' onclick='toggle()'>See Answers</button>",
   DFS: "<i>G</i> = graph<br><i>v</i> = starting node<br>DFS(<i>G</i>, <i>v</i>)<br><br>label <i>v</i> as discovered<br><br><b>for all</b> <i>v</i> to <i>w</i> <b>in</b> <i>G</i>.adjacent(<i>v</i>) <b>do</b><ol><b>if</b> vertex <i>w</i> is not labeled as discovered <b>then</b><ol><input></ol></ol><br><button id='ansBtn' class='btn btn-outline-dark' onclick='toggle()'>See Answers</button>",
   SP: "<i>G</i> = graph<br><i>start</i> = starting node<br>Dijkstra(<i>G</i>, <i>start</i>)<br><br>let <i>Q</i> be a set of nodes<br><br><b>for each</b> vertex <i>v</i> in <i>G</i> <b>do</b><ol>distance[<i>v</i>] = infinity<br>prev[<i>v</i>] = undefined<br>add <i>v</i> to <i>Q</i></ol><input><br><br><b>while</b> <input> <b>do</b><ol><i>u</i> = vertex in <i>Q</i> with minimum distance[<i>u</i>]<br>remove <i>u</i> from <i>Q</i><br><b>for each</b> neighbor <i>v</i> of <i>u</i> <b>do</b><ol><i>compare</i> = <input><br><b>if</b> <i>compare</i> < distance[<i>v</i>] <b>do</b><ol>distance[<i>v</i>] = <i>compare</i><br>prev[<i>v</i>] = <i>u</i></ol></ol></ol><b>return</b> distance[], prev[]<br><br><br><button id='ansBtn' class='btn btn-outline-dark' onclick='toggle()'>See Answers</button>",
-  MST: "<i>G</i> = graph<br>Kruskal(<i>G</i>)<br><br>let <i>F</i> be a set of edges<br><br><b>for each</b> (<i>u</i>, <i>v</i>) <b>in</b> <i>G</i>.edges ordered by <input> <b>do</b><ol><b>if</b> (<i>u</i>, <i>v</i>) <input> <b>then</b><ol>add (<i>u</i>, <i>v</i>) to <i>F</i></ol></ol><b>return</b> <i>F</i><br><br><br><button id='ansBtn' class='btn btn-outline-dark' onclick='toggle()'>See Answers</button>",
   CD: "<i>G</i> = graph<br><i>v</i> = any vertex in <i>G</i><br><br><b>if</b> <input> finds edge that points to <input> <b>then</b><ol><b>return</b> true</ol><br><button id='ansBtn' class='btn btn-outline-dark' onclick='toggle()'>See Answers</button>"
 }
 
@@ -212,7 +213,6 @@ const algoAnsDict = {
   BFS: "<i>G</i> = graph<br><i>root</i> = starting node<br>BFS(<i>G</i>, <i>root</i>)<br><br>let <i>Q</i> be a queue<br>label <i>root</i> as discovered<br><i>Q</i>.enqueue(<i>root</i>)<br><br><b>while</b> <i>Q</i>  is not empty <b>do</b><ol><i>v</i> = <i>Q</i>.dequeue()<br><b>if</b> <i>v</i> is the goal <b>then</b><ol><b>return</b> <i>v</i></ol><b>for all</b> edges from <i>v</i> to <i>w</i> <b>in</b> <i>G</i>.adjacent(<i>v</i>) <b>do</b><ol><b>if</b> <i>w</i> is not labeled as discovered <b>then</b><ol>label <i>w</i> as discovered<br><i>Q</i>.enqueue(<i>w</i>)</ol></ol></ol><br><button id='ansBtn' class='btn btn-outline-dark' onclick='toggle()'>Hide Answers</button>",
   DFS: "<i>G</i> = graph<br><i>v</i> = starting node<br>DFS(<i>G</i>, <i>v</i>)<br><br>label <i>v</i> as discovered<br><br><b>for all</b> <i>v</i> to <i>w</i> <b>in</b> <i>G</i>.adjacent(<i>v</i>) <b>do</b><ol><b>if</b> vertex <i>w</i> is not labeled as discovered <b>then</b><ol>recursively call DFS(<i>G</i>, <i>w</i>)</ol></ol><br><button id='ansBtn' class='btn btn-outline-dark' onclick='toggle()'>Hide Answers</button>",
   SP: "<i>G</i> = graph<br><i>start</i> = starting node<br>Dijkstra(<i>G</i>, <i>start</i>)<br><br>let <i>Q</i> be a set of nodes<br><br><b>for each</b> vertex <i>v</i> in <i>G</i> <b>do</b><ol>distance[<i>v</i>] = infinity<br>prev[<i>v</i>] = undefined<br>add <i>v</i> to <i>Q</i></ol>distance[<i>start</i>] = 0<br><br><b>while</b> <i>Q</i> is not empty <b>do</b><ol><i>u</i> = vertex in <i>Q</i> with minimum distance[<i>u</i>]<br>remove <i>u</i> from <i>Q</i><br><b>for each</b> neighbor <i>v</i> of <i>u</i> <b>do</b><ol><i>compare</i> = distance[<i>u</i>] + length(<i>u</i>, <i>v</i>)<br><b>if</b> <i>compare</i> < distance[<i>v</i>] <b>do</b><ol>distance[<i>v</i>] = <i>compare</i><br>prev[<i>v</i>] = <i>u</i></ol></ol></ol><b>return</b> distance[], prev[]<br><br><br><button id='ansBtn' class='btn btn-outline-dark' onclick='toggle()'>Hide Answers</button>",
-  MST: "<i>G</i> = graph<br>Kruskal(<i>G</i>)<br><br>let <i>F</i> be a set of edges<br><br><b>for each</b> (<i>u</i>, <i>v</i>) <b>in</b> <i>G</i>.edges ordered by low to high weight <b>do</b><ol><b>if</b> (<i>u</i>, <i>v</i>) does not make a cycle in <i>F</i> <b>then</b><ol>add (<i>u</i>, <i>v</i>) to <i>F</i></ol></ol><b>return</b> <i>F</i><br><br><br><button id='ansBtn' class='btn btn-outline-dark' onclick='toggle()'>Hide Answers</button>",
   CD: "<i>G</i> = graph<br><i>v</i> = any vertex in <i>G</i><br><br><b>if</b> DFS(<i>G</i>, <i>v</i>) finds edge that points to ancestor of current vertex <b>then</b><ol><b>return</b> true</ol><br><button id='ansBtn' class='btn btn-outline-dark' onclick='toggle()'>Hide Answers</button>"
 }
 
