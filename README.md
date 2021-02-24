@@ -15,5 +15,4 @@ This website is made for software engineering module group project.
 * BFS
 * DFS
 * Dijkstra (Shortest path)
-* Kruskal (Minimum Spanning tree)
 * Cycle detection
