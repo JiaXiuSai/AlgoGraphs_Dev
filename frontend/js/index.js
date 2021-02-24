@@ -99,7 +99,7 @@ inputForm.addEventListener('submit', function (event) {
         return
       }
     }
-    userInput = [type, graph, nodes, algorithms]
+    userInput = [type, graph, nodes, source, destination, algorithms]
     error_nodes.classList.remove("d-block");
     error_graphs.classList.remove("d-block");
     error_source.classList.remove("d-block");
