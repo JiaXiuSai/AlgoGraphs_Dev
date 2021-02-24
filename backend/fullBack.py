@@ -2,16 +2,6 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import random
 
-#note for mitchell
-#for capturing the order of the images (and the right number), may
-#need to return the order (in search algs) to
-#ensure the right amount of images are collected
-
-#ask jacob
-#hypercube n currently dimension, ask jacob how he is doing in front end, may need to send down the sq rooted version
-# or change the for loops from 2**n to n
-
-#hypercube 4 is still an option 16
 """
 all these added below
 
@@ -198,77 +188,40 @@ def bipartite(numNodes):
 
 def hypercube(n):
     plt.clf()
-    if n==0:
+    if n==1:
         x= nx.Graph()
         x.add_node(0)
+        
+    elif n==8:
+        x= nx.Graph()
+        for i in range(0,n):
+            x.add_node(i)
+        x.add_edge(0,1)
+        x.add_edge(0,2)
+        x.add_edge(0,3)
+        x.add_edge(1,4)
+        x.add_edge(1,5)
+        x.add_edge(2,4)
+        x.add_edge(2,6)
+        x.add_edge(3,5)
+        x.add_edge(3,6)
+        x.add_edge(4,7)
+        x.add_edge(5,7)
+        x.add_edge(6,7)
+        
     elif n==4:
         x= nx.Graph()
-        for i in range(0,2**n):
-            x.add_node(i)
-        x.add_edge(0,1)
-        x.add_edge(0,2)
-        x.add_edge(0,3)
-        x.add_edge(1,4)
-        x.add_edge(1,5)
-        x.add_edge(2,4)
-        x.add_edge(2,6)
-        x.add_edge(3,5)
-        x.add_edge(3,6)
-        x.add_edge(4,7)
-        x.add_edge(5,7)
-        x.add_edge(6,7)
-
-        x.add_edge(8,9)
-        x.add_edge(8,10)
-        x.add_edge(8,11)
-        x.add_edge(9,12)
-        x.add_edge(9,13)
-        x.add_edge(10,12)
-        x.add_edge(10,14)
-        x.add_edge(11,13)
-        x.add_edge(11,14)
-        x.add_edge(12,15)
-        x.add_edge(13,15)
-        x.add_edge(14,15)
-
-        x.add_edge(0,8)
-        x.add_edge(1,9)
-        x.add_edge(2,10)
-        x.add_edge(3,11)
-        x.add_edge(4,12)
-        x.add_edge(5,13)
-        x.add_edge(6,14)
-        x.add_edge(7,15)
-        
-    elif n==3:
-        x= nx.Graph()
-        for i in range(0,2**n):
-            x.add_node(i)
-        x.add_edge(0,1)
-        x.add_edge(0,2)
-        x.add_edge(0,3)
-        x.add_edge(1,4)
-        x.add_edge(1,5)
-        x.add_edge(2,4)
-        x.add_edge(2,6)
-        x.add_edge(3,5)
-        x.add_edge(3,6)
-        x.add_edge(4,7)
-        x.add_edge(5,7)
-        x.add_edge(6,7)
-        
-    elif n==2:
-        x= nx.Graph()
-        for i in range(0,2**n):
+        for i in range(0,n):
             x.add_node(i)
         x.add_edge(0,1)
         x.add_edge(1,2)
         x.add_edge(2,3)
         x.add_edge(0,3)
         
-    elif n==1:
+    elif n==2:
         x= nx.Graph()
-        for i in range(0,2**n):
+        for i in range(0,n):
+            print(i)
             x.add_node(i)
         x.add_edge(0,1)
         
@@ -358,10 +311,8 @@ def cycleDetection(adjlist,G,positions):
             if(coloured==False):
                 node_colour_list[e]='white'
             else:
-                #positions = nx.spring_layout(G)
                 edge_colour_list = [G[e[0]][e[1]]['color'] for e in G.edges()]
                 nx.draw(G, pos=positions,node_color=node_colour_list,edge_color=edge_colour_list)
-                #nx.draw_networkx_labels(G, pos=positions)
                 try:
                     nx.draw_networkx_labels(G, pos=positions,labels={n: n+1 for n in G})
                 except:
