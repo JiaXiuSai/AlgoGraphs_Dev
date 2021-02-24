@@ -160,7 +160,7 @@
                             </div>
                             <div id="error-nodes" class="invalid-feedback " style="text-align: center"></div>
                         </div>
-                        <div class="col-lg-3 col-sm-6 mb-3">
+                        <div class="col-lg-2 col-sm-4 mb-2">
                             <h5 class="text-center">Graphs</h5>
                             <select class="form-control " id="graph" onchange="changeGraph();">
                                 <option value="None">None</option>
@@ -188,6 +188,24 @@
                                 <option value="SP">Dijkstra's algorithm</option>
                                 <option value="CD">Cycle Detection</option>
                             </select>
+                        </div>
+                    </div>
+                    <div id="Dijkstra" class="row justify-content-center" style="display: none;">
+                        <div class="col-lg-2 col-sm-4 mb-2">
+                            <h6 class="text-center">Source</h6>
+                            <div class="input-group" style="display: flex; justify-content: center;">
+                                <input class="form-control input-number" type="text" id="source" value="1"
+                                    style="max-width: 30%; text-align: center;" />
+                            </div>
+                            <div id="error-source" class="invalid-feedback " style="text-align: center"></div>
+                        </div>
+                        <div class="col-lg-2 col-sm-4 mb-2">
+                            <h6 class="text-center">Destination</h6>
+                            <div class="input-group" style="display: flex; justify-content: center;">
+                                <input class="form-control input-number" type="text" id="destination" value="2"
+                                    style="max-width: 30%; text-align: center;"/>
+                            </div>
+                            <div id="error-destination" class="invalid-feedback " style="text-align: center"></div>
                         </div>
                     </div>
                     <h6 class="card-subtitle mb-2 text-muted text-center">Compile to see a visual simulation of the

@@ -13,8 +13,12 @@ inputForm.addEventListener('submit', function (event) {
     var graph = document.getElementById('graph').value;
     var nodes = document.getElementById("nodes").value;
     var algorithms = document.getElementById('algorithms').value;
+    var source = document.getElementById("source").value;
+    var destination = document.getElementById('destination').value;
     var error_nodes = document.getElementById('error-nodes');
     var error_graphs = document.getElementById('error-graphs');
+    var error_source = document.getElementById('error-source');
+    var error_destination = document.getElementById('error-destination');
 
     if (graph == 'Custom') {
       var matrix = [];
@@ -73,9 +77,33 @@ inputForm.addEventListener('submit', function (event) {
       error_graphs.classList.add("d-block");
       return
     }
+    if (algorithms == 'SP') {
+      if (nodes == 1) {
+        error_nodes.innerHTML = "Must be more than 1 for dijkstra's algorithm.";
+        error_nodes.classList.add("d-block");
+        return
+      }
+      if (isNaN(source) || source > nodes) {
+        error_source.innerHTML = "Source node must be between 1 and " + nodes + ".";
+        error_source.classList.add("d-block");
+        return
+      }
+      if (isNaN(destination) || destination > nodes) {
+        error_destination.innerHTML = "Destination node must be between 1 and " + nodes + ".";
+        error_destination.classList.add("d-block");
+        return
+      }
+      if (source == destination) {
+        error_destination.innerHTML = "Destination node cannot be the same as Source node.";
+        error_destination.classList.add("d-block");
+        return
+      }
+    }
     userInput = [type, graph, nodes, algorithms]
     error_nodes.classList.remove("d-block");
     error_graphs.classList.remove("d-block");
+    error_source.classList.remove("d-block");
+    error_destination.classList.remove("d-block");
     console.log(userInput)
   } catch (error) {
     window.alert(error);
@@ -225,6 +253,12 @@ function changeAlgo() {
     algoDesc.innerHTML = algoDescDict[algorithms];
   } else {
     algoDesc.innerHTML = algoBlankDict[algorithms];
+  }
+  var source = document.getElementById('Dijkstra');
+  if (algorithms == "SP") {
+    source.style.display = '';
+  } else {
+    source.style.display = "none";
   }
 }
 
