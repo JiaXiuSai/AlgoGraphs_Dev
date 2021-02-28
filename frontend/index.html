@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>AlgoGraph</title>
+    <title>AlgoGraphs</title>
     <link rel="icon" type="image/x-icon" href="assets\img\icon_white.png" />
     <!-- Font Awesome icons-->
     <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" crossorigin="anonymous"></script>
@@ -28,7 +28,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
         <div class="container">
             <a class="navbar-brand js-scroll-trigger" href="#page-top" style="color: white;"><img
-                    src="assets\img\icon_white.png" alt="AlgoGraphs" style="height:50px;"></a>
+                    src="assets\img\icon_white.png" alt="AlgoGraphs" style="height:30px;"></a>
             <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
                 data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -56,8 +56,8 @@
     <section class="page-section" id="home">
         <div class="container">
             <div class="text-center">
-                <h2 class="section-heading text-uppercase">Welcome to AlgoGraph</h2>
-                <h3 class="section-subheading text-muted"> AlgoGraph is a website dedicated to helping students learn
+                <h2 class="section-heading text-uppercase">Welcome to AlgoGraphs</h2>
+                <h3 class="section-subheading text-muted"> AlgoGraphs is a website dedicated to helping students learn
                     about graphs and algorithms. We strive to help you learn, practice, and visualise algorithms in
                     order to help you succeed in the modern tech industry.</h3>
             </div>
@@ -93,7 +93,7 @@
         </div>
     </section>
     <!-- Learn -->
-    <section class="page-section bg-light" id="learn" style="padding:3rem ">
+    <section class="page-section bg-light" id="portfolio" style="padding:3rem;">
         <div class="container">
             <div class="text-center">
                 <h2 class="section-heading text-uppercase">Learn</h2>
@@ -102,8 +102,11 @@
             <!-- Slideshow -->
             <div class="row justify-content-center collapse" id="slideshow" style="padding: 1rem 0;">
                 <div>
+
                     <img class="border border-dark rounded justify-content-center" name="slide" id="imgSlideshow"
-                        style="width: 100%; height: auto;" src="assets\img\slideshow\Figure_1.png">
+                        style="width: 100%; height: auto;" src=" static/graph_images/4cycle.png ">
+                    <!-- static/assets/img/slideshow/Figure_1.png / {{url_for('test', filename=image_name) }} -->
+
                     <div class="row justify-content-md-center" style="padding-top:10px;">
                         <div class="col col-lg-2"></div>
                         <div class="col col-lg-1"></div>
@@ -139,7 +142,8 @@
                 </div>
             </div> <!-- Slideshow tab //-->
             <div>
-                <form id="userInputForm" name="userInputForm" action="/input" method="post">
+                <form id="userInputForm" name="userInputForm" action="/test" method="post">
+                    <!-- onsubmit change -->
                     <div class="row justify-content-center">
                         <div class="col-lg-2 col-sm-4 mb-2">
                             <h5 class="text-center">Type of Graph</h5>
@@ -160,7 +164,7 @@
                             </div>
                             <div id="error-nodes" class="invalid-feedback " style="text-align: center"></div>
                         </div>
-                        <div class="col-lg-2 col-sm-4 mb-2">
+                        <div class="col-lg-3 col-sm-6 mb-3">
                             <h5 class="text-center">Graphs</h5>
                             <select class="form-control " id="graph" onchange="changeGraph();">
                                 <option value="None">None</option>
@@ -174,7 +178,7 @@
                                 <option value="Petersen">Petersen graph</option>
                                 <option value="Custom">Custom</option>
                             </select>
-                            <div id="error-graphs" class="invalid-feedback " style="text-align: center">Please choose a
+                            <div id="error-graphs" class="invalid-feedback" style="text-align: center">Please choose a
                                 graph.</div>
                         </div>
                         <div class="col-lg-3 col-sm-6 mb-3">
@@ -197,15 +201,15 @@
                                 <input class="form-control input-number" type="text" id="source" value="1"
                                     style="max-width: 30%; text-align: center;" />
                             </div>
-                            <div id="error-source" class="invalid-feedback " style="text-align: center"></div>
+                            <div id="error-source" class="invalid-feedback" style="text-align: center"></div>
                         </div>
                         <div class="col-lg-2 col-sm-4 mb-2">
                             <h6 class="text-center">Destination</h6>
                             <div class="input-group" style="display: flex; justify-content: center;">
                                 <input class="form-control input-number" type="text" id="destination" value="2"
-                                    style="max-width: 30%; text-align: center;"/>
+                                    style="max-width: 30%; text-align: center;" />
                             </div>
-                            <div id="error-destination" class="invalid-feedback " style="text-align: center"></div>
+                            <div id="error-destination" class="invalid-feedback" style="text-align: center"></div>
                         </div>
                     </div>
                     <h6 class="card-subtitle mb-2 text-muted text-center">Compile to see a visual simulation of the
@@ -235,7 +239,6 @@
                             description</h6>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
@@ -254,9 +257,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 
-    <!-- Contact form JS-->
-    <script src="assets/mail/jqBootstrapValidation.js"></script>
-    <script src="assets/mail/contact_me.js"></script>
     <!-- Core theme JS-->
     <script src="js/scripts.js"></script>
     <!-- Custom JS-->

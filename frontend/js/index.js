@@ -1,4 +1,8 @@
 // form input and parsing
+var img = [];
+var numberOfImg = 0;
+var specific_user = "";
+var full_path = "";
 const inputForm = document.getElementById('userInputForm');
 inputForm.addEventListener('submit', function (event) {
   try {
@@ -10,6 +14,7 @@ inputForm.addEventListener('submit', function (event) {
     } else {
       type = "DG";
     }
+
     var graph = document.getElementById('graph').value;
     var nodes = document.getElementById("nodes").value;
     var algorithms = document.getElementById('algorithms').value;
@@ -21,6 +26,7 @@ inputForm.addEventListener('submit', function (event) {
     var error_destination = document.getElementById('error-destination');
 
     if (graph == 'Custom') {
+
       var matrix = [];
       for (var m = 0; m < nodes; m++) {
         matrix[m] = [];
@@ -99,17 +105,46 @@ inputForm.addEventListener('submit', function (event) {
         return
       }
     }
-    userInput = [type, graph, nodes, source, destination, algorithms]
+    var obj = {
+      type: type,
+      nodes: nodes,
+      graph: graph,
+      source: source,
+      destination: destination,
+      algorithm: algorithms
+    };
+    var myJSON = JSON.stringify(obj);
     error_nodes.classList.remove("d-block");
     error_graphs.classList.remove("d-block");
     error_source.classList.remove("d-block");
     error_destination.classList.remove("d-block");
-    console.log(userInput)
+    console.log(myJSON);
+    fetch(`${window.origin}/test`, {
+        method: "POST",
+        credentials: "include",
+        body: myJSON,
+        cache: "no-cache",
+        headers: new Headers({
+          "content-type": "application/json"
+        })
+      })
+      .then(function (response) {
+        if (response.status !== 200) {
+          console.log(`Response status was not 200: ${response.status}`);
+          return;
+        }
+
+        response.json().then(function (data) {
+          console.log(data);
+          return_images(data.images);
+          return_length(img.length);
+          return_user(data.user_id);
+        })
+      })
   } catch (error) {
     window.alert(error);
   }
 });
-
 
 // button control functions for increasing number of nodes nodes
 function upNodes(max) {
@@ -225,14 +260,13 @@ const algoDescDict = {
   DFS: "<h5 class=\"card-title\">Depth-first search</h5><p class=\"card-text\">Depth-first search is a graph traversal algorithm that starts traversing the graph from the root node and explores as far as possible along each branch before backtracking. So the basic idea is to start from the root or any arbitrary node and mark the node and move to the adjacent unmarked node and continue this loop until there is no unmarked adjacent node. Then backtrack and check for other unmarked nodes and traverse them.</p><a href=\"https://www.google.com/search?q=Depth+First+Search\" class=\"card-link\" target=\"_blank\" rel=\"noreferrer noopener\">Google</a>",
   SP: "<h5 class=\"card-title\">Dijkstra's algorithm</h5><p class=\"card-text\">Dijkstra's algorithm solves the problem of finding the shortest path from a point in a graph (the source) to a destination. The graph representing all the paths from one vertex to all the others must be a spanning tree - it must include all vertices. There will also be no cycles as a cycle would define more than one path from the selected vertex to at least one other vertex. The steps for implementing Dijkstra’s algorithm are as follows: <ol><li>Mark your selected initial node with a current distance of 0 and the rest with infinity.</li><li> Set the non-visited node with the smallest current distance as the current node C.</li><li> For each neighbour N of your current node C: add the current distance of C with the weight of the edge connecting C-N.</li><li> If it's smaller than the current distance of N, set it as the new current distance of N. Mark the current node C as visited.</li><li>If there are non-visited nodes, go to step 2.</li></ol><a href=\"https://www.google.com/search?q=Dijkstra+algorithm\" class=\"card-link\" target=\"_blank\" rel=\"noreferrer noopener\">Google</a>",
   CD: "<h5 class=\"card-title\">Cycle Detection</h5><p class=\"card-text\">Run a DFS from every unvisited node. Depth First Traversal can be used to detect a cycle in a Graph. DFS for a connected graph produces a tree. There is a cycle in a graph only if there is a back edge present in the graph. A back edge is an edge that is joining a node to itself (self-loop) or one of its ancestor in the tree produced by DFS. To find the back edge to any of its ancestor keep a visited array and if there is a back edge to any visited node then there is a loop and return true.</h6>"
-
 }
 
 const algoBlankDict = {
   None: "<h6 class=\"card-subtitle mb-2 text-muted text-center\">Select an example algorithm to see code</h6>",
   BFS: "<i>G</i> = graph<br><i>root</i> = starting node<br>BFS(<i>G</i>, <i>root</i>)<br><br>let <i>Q</i> be a queue<br>label <i>root</i> as discovered<br><input><br><br><b>while</b> <i>Q</i>  is not empty <b>do</b><ol><i>v</i> = <i>Q</i>.dequeue()<br><b>if</b> <input> <b>then</b><ol><b>return</b> <i>v</i></ol><b>for all</b> edges from <i>v</i> to <i>w</i> <b>in</b> <i>G</i>.adjacent(<i>v</i>) <b>do</b><ol><b>if</b> <i>w</i> is not labeled as discovered <b>then</b><ol>label <i>w</i> as discovered<br><input></ol></ol></ol><br><button id='ansBtn' class='btn btn-outline-dark' onclick='toggle()'>See Answers</button>",
   DFS: "<i>G</i> = graph<br><i>v</i> = starting node<br>DFS(<i>G</i>, <i>v</i>)<br><br>label <i>v</i> as discovered<br><br><b>for all</b> <i>v</i> to <i>w</i> <b>in</b> <i>G</i>.adjacent(<i>v</i>) <b>do</b><ol><b>if</b> vertex <i>w</i> is not labeled as discovered <b>then</b><ol><input></ol></ol><br><button id='ansBtn' class='btn btn-outline-dark' onclick='toggle()'>See Answers</button>",
-  SP: "<i>G</i> = graph<br><i>start</i> = starting node<br>Dijkstra(<i>G</i>, <i>start</i>)<br><br>let <i>Q</i> be a set of nodes<br><br><b>for each</b> vertex <i>v</i> in <i>G</i> <b>do</b><ol>distance[<i>v</i>] = infinity<br>prev[<i>v</i>] = undefined<br>add <i>v</i> to <i>Q</i></ol><input><br><br><b>while</b> <input> <b>do</b><ol><i>u</i> = vertex in <i>Q</i> with minimum distance[<i>u</i>]<br>remove <i>u</i> from <i>Q</i><br><b>for each</b> neighbor <i>v</i> of <i>u</i> <b>do</b><ol><i>compare</i> = <input><br><b>if</b> <i>compare</i> < distance[<i>v</i>] <b>do</b><ol>distance[<i>v</i>] = <i>compare</i><br>prev[<i>v</i>] = <i>u</i></ol></ol></ol><b>return</b> distance[], prev[]<br><br><br><button id='ansBtn' class='btn btn-outline-dark' onclick='toggle()'>See Answers</button>",
+  SP: "<i>G</i> = graph<br><i>start</i> = starting node<br>Dijkstra(<i>G</i>, <i>start</i>)<br><br>let <i>Q</i> be a set of nodes<br><br><b>for each</b> vertex <i>v</i> in <i>G</i> <b>do</b><ol>distance[<i>v</i>] = infinity<br>prev[<i>v</i>] = undefined<br>add <i>v</i> to <i>Q</i></ol><input><br><br><b>while</b> <input> <b>do</b><ol><i>u</i> = vertex in <i>Q</i> with minimum distance[<i>u</i>]<br>remove <i>u</i> from <i>Q</i><br><b>for each</b> neighbour <i>v</i> of <i>u</i> <b>do</b><ol><i>compare</i> = <input><br><b>if</b> <i>compare</i> < distance[<i>v</i>] <b>do</b><ol>distance[<i>v</i>] = <i>compare</i><br>prev[<i>v</i>] = <i>u</i></ol></ol></ol><b>return</b> distance[], prev[]<br><br><br><button id='ansBtn' class='btn btn-outline-dark' onclick='toggle()'>See Answers</button>",
   CD: "<i>G</i> = graph<br><i>v</i> = any vertex in <i>G</i><br><br><b>if</b> <input> finds edge that points to <input> <b>then</b><ol><b>return</b> true</ol><br><button id='ansBtn' class='btn btn-outline-dark' onclick='toggle()'>See Answers</button>"
 }
 
@@ -240,10 +274,9 @@ const algoAnsDict = {
   None: "<h6 class=\"card-subtitle mb-2 text-muted text-center\">Select an example algorithm to see code</h6>",
   BFS: "<i>G</i> = graph<br><i>root</i> = starting node<br>BFS(<i>G</i>, <i>root</i>)<br><br>let <i>Q</i> be a queue<br>label <i>root</i> as discovered<br><i>Q</i>.enqueue(<i>root</i>)<br><br><b>while</b> <i>Q</i>  is not empty <b>do</b><ol><i>v</i> = <i>Q</i>.dequeue()<br><b>if</b> <i>v</i> is the goal <b>then</b><ol><b>return</b> <i>v</i></ol><b>for all</b> edges from <i>v</i> to <i>w</i> <b>in</b> <i>G</i>.adjacent(<i>v</i>) <b>do</b><ol><b>if</b> <i>w</i> is not labeled as discovered <b>then</b><ol>label <i>w</i> as discovered<br><i>Q</i>.enqueue(<i>w</i>)</ol></ol></ol><br><button id='ansBtn' class='btn btn-outline-dark' onclick='toggle()'>Hide Answers</button>",
   DFS: "<i>G</i> = graph<br><i>v</i> = starting node<br>DFS(<i>G</i>, <i>v</i>)<br><br>label <i>v</i> as discovered<br><br><b>for all</b> <i>v</i> to <i>w</i> <b>in</b> <i>G</i>.adjacent(<i>v</i>) <b>do</b><ol><b>if</b> vertex <i>w</i> is not labeled as discovered <b>then</b><ol>recursively call DFS(<i>G</i>, <i>w</i>)</ol></ol><br><button id='ansBtn' class='btn btn-outline-dark' onclick='toggle()'>Hide Answers</button>",
-  SP: "<i>G</i> = graph<br><i>start</i> = starting node<br>Dijkstra(<i>G</i>, <i>start</i>)<br><br>let <i>Q</i> be a set of nodes<br><br><b>for each</b> vertex <i>v</i> in <i>G</i> <b>do</b><ol>distance[<i>v</i>] = infinity<br>prev[<i>v</i>] = undefined<br>add <i>v</i> to <i>Q</i></ol>distance[<i>start</i>] = 0<br><br><b>while</b> <i>Q</i> is not empty <b>do</b><ol><i>u</i> = vertex in <i>Q</i> with minimum distance[<i>u</i>]<br>remove <i>u</i> from <i>Q</i><br><b>for each</b> neighbor <i>v</i> of <i>u</i> <b>do</b><ol><i>compare</i> = distance[<i>u</i>] + length(<i>u</i>, <i>v</i>)<br><b>if</b> <i>compare</i> < distance[<i>v</i>] <b>do</b><ol>distance[<i>v</i>] = <i>compare</i><br>prev[<i>v</i>] = <i>u</i></ol></ol></ol><b>return</b> distance[], prev[]<br><br><br><button id='ansBtn' class='btn btn-outline-dark' onclick='toggle()'>Hide Answers</button>",
+  SP: "<i>G</i> = graph<br><i>start</i> = starting node<br>Dijkstra(<i>G</i>, <i>start</i>)<br><br>let <i>Q</i> be a set of nodes<br><br><b>for each</b> vertex <i>v</i> in <i>G</i> <b>do</b><ol>distance[<i>v</i>] = infinity<br>prev[<i>v</i>] = undefined<br>add <i>v</i> to <i>Q</i></ol>distance[<i>start</i>] = 0<br><br><b>while</b> <i>Q</i> is not empty <b>do</b><ol><i>u</i> = vertex in <i>Q</i> with minimum distance[<i>u</i>]<br>remove <i>u</i> from <i>Q</i><br><b>for each</b> neighbour <i>v</i> of <i>u</i> <b>do</b><ol><i>compare</i> = distance[<i>u</i>] + length(<i>u</i>, <i>v</i>)<br><b>if</b> <i>compare</i> < distance[<i>v</i>] <b>do</b><ol>distance[<i>v</i>] = <i>compare</i><br>prev[<i>v</i>] = <i>u</i></ol></ol></ol><b>return</b> distance[], prev[]<br><br><br><button id='ansBtn' class='btn btn-outline-dark' onclick='toggle()'>Hide Answers</button>",
   CD: "<i>G</i> = graph<br><i>v</i> = any vertex in <i>G</i><br><br><b>if</b> DFS(<i>G</i>, <i>v</i>) finds edge that points to ancestor of current vertex <b>then</b><ol><b>return</b> true</ol><br><button id='ansBtn' class='btn btn-outline-dark' onclick='toggle()'>Hide Answers</button>"
 }
-
 
 // Function for changing algorithms
 function changeAlgo() {
@@ -271,19 +304,12 @@ function resetDesc() {
   document.getElementById("codeBtn").innerHTML = "Code";
 }
 
-
 // SLideshow functions
-// TODO incorporate backend
 var x = false
 var speed = 2000
-var path = "assets\\img\\slideshow\\"
-var imgNumber = 0;
-var img = ["Figure_1.png",
-  "Figure_2.png",
-  "Figure_3.png",
-  "Figure_4.png"
-];
-var numberOfImg = img.length;
+var path = ''; // "assets\\img\\slideshow\\""..\\..\\frontend\\graph_images\\"
+var imgNumber = 0; // ["Figure_1.png", "Figure_2.png","Figure_3.png","Figure_4.png"]
+//var numberOfImg = img.length;
 const play = "<i class=\"fa fa-play\" aria-hidden=\"true\"></i>"
 const pause = "<i class=\"fa fa-pause\" aria-hidden=\"true\"></i>"
 const startCycle = document.getElementById('startCycle');
@@ -315,6 +341,19 @@ startCycle.addEventListener('click', function () {
   }
 });
 
+function return_images(image_list) {
+  img = image_list;
+}
+
+function return_length(image_array) {
+  numberOfImg = img.length;
+}
+
+function return_user(user_id) {
+  specific_user = user_id;
+  full_path = "graph_images/" + specific_user + "/";
+  path = full_path;
+}
 
 function slide() {
   imgNumber = (imgNumber + 1) % img.length;
@@ -358,8 +397,7 @@ function nextImage() {
 function changeCounter(cur, total) {
   document.getElementById("counter").innerHTML = cur + "/" + total;
 }
-document.getElementById("counter").innerHTML = 1 + "/" + img.length;
-
+document.getElementById("counter").innerHTML = 1 + "/" + numberOfImg;
 
 //Custom input functions
 function showGrid() {
@@ -429,29 +467,23 @@ function createGrid(nodes) {
   return gr;
 }
 
-
 function toggle() {
   var algorithms = document.getElementById('algorithms').value;
   var algoDesc = document.getElementById('algoDesc');
   if (document.getElementById("ansBtn").innerHTML == 'See Answers') {
     algoDesc.innerHTML = algoAnsDict[algorithms];
   } else {
-    var algorithms = document.getElementById('algorithms').value;
-    var algoDesc = document.getElementById('algoDesc');
     algoDesc.innerHTML = algoBlankDict[algorithms];
   }
 }
 
-
 function codeMode() {
+  var algorithms = document.getElementById('algorithms').value;
+  var algoDesc = document.getElementById('algoDesc');
   if (document.getElementById("codeBtn").innerHTML == "Code") {
-    var algorithms = document.getElementById('algorithms').value;
-    var algoDesc = document.getElementById('algoDesc');
     algoDesc.innerHTML = algoBlankDict[algorithms];
     document.getElementById("codeBtn").innerHTML = "Description";
   } else {
-    var algorithms = document.getElementById('algorithms').value;
-    var algoDesc = document.getElementById('algoDesc');
     algoDesc.innerHTML = algoDescDict[algorithms];
     document.getElementById("codeBtn").innerHTML = "Code";
   }
