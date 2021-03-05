@@ -110,52 +110,62 @@ def star(numNodes):
 
 
 def tree(numNodes):
-    plt.clf()
-    G= nx.Graph()
-    if numNodes == 1:
-        G.add_node(0)
-    elif numNodes > 1:
-        G.add_node(0)
-        for i in range(1,numNodes):
-            G.add_node(i)
-            prob = random.uniform(0,1)
-            print(prob)
-            if prob>0.5:
-                randy = random.randint(0,i-1)
-                G.add_edge(randy,i)
-            else:
-                G.add_edge(i,i-1)
-    no3 = False
-    save2 = []
-    ones = []
-    for i in G.nodes():#range(0,numNodes):
-        x = [n for n in G.neighbors(i)]
-        print(x,'nodes',i)
-        if len(x)==3:
-            no3=True
+
+    for trying in range(10):
+        plt.clf()
+        G= nx.Graph()
+        if numNodes == 1:
+            G.add_node(0)
             break
-        if len(x)==2:
-            save2.append(i)
-        if len(x)==1:
-            ones.append(i)
-    print('/////')
-    print(save2)
-    if no3==False:
-        print('entere')
-        #delete last
-        for i in ones:
-            if i not in save2:
-                print('i',i)
-                
-                x = [n for n in G.neighbors(i)]
-                G.remove_node(i)
-                print(i)
-                save2.remove(x[0])
-                for j in save2:
-                    G.add_node(i)
-                    G.add_edge(j,i)
-                    break
+        elif numNodes > 1:
+            G.add_node(0)
+            for i in range(1,numNodes):
+                G.add_node(i)
+                prob = random.uniform(0,1)
+                print(prob)
+                if prob>0.5:
+                    randy = random.randint(0,i-1)
+                    G.add_edge(randy,i)
+                else:
+                    G.add_edge(i,i-1)
+        if numNodes <= 3:
+            break
+        no3 = False
+        save2 = []
+        deg3=[]
+        ones = []
+        for i in G.nodes():#range(0,numNodes):
+            x = [n for n in G.neighbors(i)]
+            print(x,'nodes',i)
+            if len(x)==3:
+                no3=True
+                deg3.append(i)
                 break
+            if len(x)==2:
+                save2.append(i)
+            if len(x)==1:
+                ones.append(i)
+##    print('/////')
+##    print(save2)
+        if no3==True:
+            break
+##            print('/////')
+##            plt.clf()
+##            G= nx.Graph()
+##            if numNodes == 1:
+##                G.add_node(0)
+##            elif numNodes > 1:
+##                G.add_node(0)
+##                for i in range(1,numNodes):
+##                    G.add_node(i)
+##                    prob = random.uniform(0,1)
+##                    print(prob)
+##                    if prob>0.5:
+##                        randy = random.randint(0,i-1)
+##                        G.add_edge(randy,i)
+##                    else:
+##                        G.add_edge(i,i-1)
+
             
         
     print(G.edges())
