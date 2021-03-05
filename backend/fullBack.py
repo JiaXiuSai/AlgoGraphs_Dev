@@ -119,20 +119,54 @@ def tree(numNodes):
         for i in range(1,numNodes):
             G.add_node(i)
             prob = random.uniform(0,1)
-            if prob>0.7:
+            print(prob)
+            if prob>0.5:
                 randy = random.randint(0,i-1)
                 G.add_edge(randy,i)
             else:
                 G.add_edge(i,i-1)
+    no3 = False
+    save2 = []
+    ones = []
+    for i in G.nodes():#range(0,numNodes):
+        x = [n for n in G.neighbors(i)]
+        print(x,'nodes',i)
+        if len(x)==3:
+            no3=True
+            break
+        if len(x)==2:
+            save2.append(i)
+        if len(x)==1:
+            ones.append(i)
+    print('/////')
+    print(save2)
+    if no3==False:
+        print('entere')
+        #delete last
+        for i in ones:
+            if i not in save2:
+                print('i',i)
+                
+                x = [n for n in G.neighbors(i)]
+                G.remove_node(i)
+                print(i)
+                save2.remove(x[0])
+                for j in save2:
+                    G.add_node(i)
+                    G.add_edge(j,i)
+                    break
+                break
+            
         
+    print(G.edges())
     G.add_nodes_from(G.nodes(), colour='never coloured')
     positions = nx.spring_layout(G)
     nx.draw(G, pos=positions,node_color='white')
     nx.draw_networkx_labels(G, pos=positions,labels={n: n+1 for n in G})
     plt.savefig((str(numNodes)+"tree.png"), dpi=300)
     adjlist=[]
-    x = nx.convert.to_dict_of_lists(G)
-    for i in x.values():
+    xx = nx.convert.to_dict_of_lists(G)
+    for i in xx.values():
         adjlist.append(i)
     return adjlist,G,positions
 
