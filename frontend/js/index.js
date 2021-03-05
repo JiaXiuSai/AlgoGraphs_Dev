@@ -8,7 +8,7 @@ inputForm.addEventListener('submit', function (event) {
   try {
     // stop default form action (client-side)
     event.preventDefault();
-
+    
     if (document.getElementById("typeToggle").checked) {
       type = "SG";
     } else {
@@ -73,8 +73,8 @@ inputForm.addEventListener('submit', function (event) {
       error_nodes.classList.add("d-block");
       return
     } else {
-      if (graph == 'Hypercubes' && (nodes != '1' || nodes != '2' || nodes != '4' || nodes != '8')) {
-        error_nodes.innerHTML = "Must be 1, 2 ,4 or 8 nodes.";
+      if (graph == 'Hypercubes' && !(nodes == '1' || nodes == '2' || nodes == '4' || nodes == '8')) {
+        error_nodes.innerHTML = "Must be 1, 2 ,4 or 8 nodes";
         error_nodes.classList.add("d-block");
         return
       }
@@ -136,6 +136,7 @@ inputForm.addEventListener('submit', function (event) {
 
         response.json().then(function (data) {
           console.log(data);
+          $(".collapse").collapse('show');
           return_images(data.images);
           return_length(img.length);
           return_user(data.user_id);
