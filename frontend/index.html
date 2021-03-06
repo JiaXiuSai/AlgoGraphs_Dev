@@ -104,8 +104,7 @@
                 <div class="mx-auto text-center">
 
                     <img class="border border-dark rounded" name="slide" id="imgSlideshow"
-                        style="width: 100%; height: auto;" src=" static/graph_images/4cycle.png ">
-                    <!-- static/assets/img/slideshow/Figure_1.png / {{url_for('test', filename=image_name) }} -->
+                        style="width: 100%; height: auto;" src="">
 
                     <div class="row justify-content-md-center" style="padding-top:10px;">
                         <div class="col col-lg-4"></div>
@@ -149,7 +148,8 @@
                             <h5 class="text-center">Type of Graph</h5>
                             <div style="display: flex; justify-content: center;">
                                 <input id="typeToggle" type="checkbox" checked data-toggle="toggle" data-on="Static"
-                                    data-off="Dynamic" data-onstyle="secondary" data-offstyle="primary">
+                                    data-off="Dynamic" data-onstyle="secondary" data-offstyle="primary"
+                                    onclick="alert('hello')">
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-6 mb-3">
@@ -166,8 +166,8 @@
                         </div>
                         <div class="col-lg-3 col-sm-6 mb-3">
                             <h5 class="text-center">Graphs</h5>
-                            <select class="form-control " id="graph" onchange="changeGraph();">
-                                <option value="None">None</option>
+                            <select class="form-control" id="graph" onchange="changeGraph();">
+                                <option id ="temporal" value="None">None</option>
                                 <option value="Cycle">Cycle</option>
                                 <option value="Star">Star</option>
                                 <option value="Path">Path</option>
@@ -177,6 +177,7 @@
                                 <option value="Hypercubes">Hypercubes</option>
                                 <option value="Petersen">Petersen graph</option>
                                 <option value="Custom">Custom</option>
+                                <option value="Temporal" style="display: none">Temporal</option>
                             </select>
                             <div id="error-graphs" class="invalid-feedback" style="text-align: center">Please choose a
                                 graph.</div>
@@ -187,6 +188,7 @@
                                     style="padding-top: 0%; padding-bottom: 0%;">Code</button></h5>
                             <select class="form-control" id="algorithms" onchange="changeAlgo();">
                                 <option value="None">None</option>
+                                <option value="FJ" style="display: none">Foremost Journey</option>
                                 <option value="BFS">Breath-First Search</option>
                                 <option value="DFS">Depth-First Search</option>
                                 <option value="SP">Dijkstra's algorithm</option>
@@ -194,7 +196,7 @@
                             </select>
                         </div>
                     </div>
-                    <div id="Dijkstra" class="row justify-content-center" style="display: none;">
+                    <div id="source&dest" class="row justify-content-center" style="display: none;">
                         <div class="col-lg-2 col-sm-4 mb-2">
                             <h6 class="text-center">Source</h6>
                             <div class="input-group" style="display: flex; justify-content: center;">
@@ -204,7 +206,7 @@
                             <div id="error-source" class="invalid-feedback" style="text-align: center"></div>
                         </div>
                         <div class="col-lg-2 col-sm-4 mb-2">
-                            <h6 class="text-center">Destination</h6>
+                            <h6 id="lifetime" class="text-center">Destination</h6>
                             <div class="input-group" style="display: flex; justify-content: center;">
                                 <input class="form-control input-number" type="text" id="destination" value="2"
                                     style="max-width: 30%; text-align: center;" />
@@ -216,7 +218,8 @@
                         graph and algorithm above</h6>
                     <div class="row">
                         <div class="col text-center">
-                            <button class="btn btn-success" id="compileBtn" type="submit" style="margin-right: 20px;">Compile</button>
+                            <button class="btn btn-success" id="compileBtn" type="submit"
+                                style="margin-right: 20px;">Compile</button>
                             <input class="btn btn-danger" type="reset" value="Reset" onclick="resetDesc()">
                         </div>
                     </div>
@@ -245,7 +248,8 @@
     <footer class="footer py-4">
         <div class="container">
             <div class="text-center">
-                Copyright © AlgoGraph 2021
+                AlgoGraph 2021 -
+                <a href="mailto: algographs@gmail.com">Contact us</a>
             </div>
         </div>
     </footer>
@@ -255,7 +259,6 @@
     <!-- Third party plugin JS-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
-
     <!-- Core theme JS-->
     <script src="js/scripts.js"></script>
     <!-- Custom JS-->
