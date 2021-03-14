@@ -15,15 +15,17 @@ all these added below
 7. hypercubes
 8. petersen
 9. custom
+10.temporal
 
 1. bfs
 2. dfs
 3. dijkstra
 4. cycle det
+5. foremost
 
-need adding/doing: temporal
+need adding/doing: temporal-done
 
-!!!!!!!!!!temporal!!!!!!!!!
+!!!!!!!!!!temporal!!!!!!!!! -done
 
 """
 
@@ -564,14 +566,11 @@ def dijkstra(adjlist,graph,positions,source,target):
       
 
 
+    
+    
 
-import networkx as nx
-import matplotlib.pyplot as plt
-import random
-from itertools import combinations
+def temporal(num,max_life):
 
-def temporal(num,max_life,src):
-    src=src-1
 ##    if num <1 or num>10:
 ##        print("please ennter number of nodes between 1 and 10")
 ##        exit()
@@ -580,17 +579,11 @@ def temporal(num,max_life,src):
     for i in range(num):
         vertices.append(i)
     
-    check= src-1
 
-    
-##    if check not in vertices:
-##        print("please ennter a source vertex between 1 and your max no. of nodes")
-##        exit()
-##
 ##    if max_life < (2*num):
 ##        print("please enter max_life which is atleast twice the number of nodes")
 ##        exit()
-##
+
 ##    if max_life > 20:
 ##        print("please enter max_life which is atleast twice the number of nodes and not more than 2")
 ##        exit()
@@ -612,7 +605,6 @@ def temporal(num,max_life,src):
     order+=1
     
     main=[]
-    source=src+1
     for j in range(0,max_life):
         #print("j",j)
         lst1=[]
@@ -621,6 +613,92 @@ def temporal(num,max_life,src):
             #print("k",k)
             for q in range(0,num):
                 #print("q",q)
+                probability = random.uniform(0, 1)
+                if(k!=q):#edges created with random probability
+                    if(probability<(1/(num))): #create random edges at diff times
+                        
+                        if((k,q) in edges_not_used) or ((q,k) in edges_not_used):
+                            vertices_traversed= (k,q)
+                            lst1.append(vertices_traversed)
+                            G.add_edge(k,q)
+                            if(k,q) in edges_not_used:
+                                edges_not_used.remove((k,q))
+                            if(q,k) in edges_not_used:
+                                edges_not_used.remove((q,k))
+                            
+        plt.clf()
+        main.append(lst1)
+        nx.draw(G, pos=positions,node_color='white')
+        nx.draw_networkx_labels(G, pos=positions,labels={n: n+1 for n in G})
+        plt.savefig((str(order)+"temporal.png"), dpi=300)
+        order+=1
+
+                
+    return G.edges 
+
+#temporal(no_of_nodes, max_life)    
+f =temporal(10,20)
+
+#no_of_nodes(n): 1 to 10  
+#max_life: >= 2n and max 20
+
+
+
+
+
+
+
+
+def temporal_foremost(num,max_life,src):
+    src=src-1
+##    if num <1 or num>10:
+##        print("please ennter number of nodes between 1 and 10")
+##        exit()
+        
+    vertices=[]
+    for i in range(num):
+        vertices.append(i)
+
+    
+
+    
+##    if check not in vertices:
+##        print("please ennter a source vertex between 1 and your max no. of nodes")
+##        exit()
+##
+##    if max_life < (2*num):
+##        print("please enter max_life which is atleast twice the number of nodes")
+##        exit()
+##
+##    if max_life > 20:
+##        print("please enter max_life which is atleast twice the number of nodes and not more than 2")
+##        exit()
+    
+
+        
+    edges_not_used= list(combinations((vertices),2)) #getting all possible combinations of length 2
+    #print("combinations possible",edges_not_used)
+    plt.clf() #used to clear the current figure
+    G= nx.Graph()
+    order=0
+    
+    for i in range(0,num):
+        G.add_node(i)
+        
+    G.add_nodes_from(G.nodes(), colour='never coloured')
+    positions = nx.spring_layout(G,scale=0.2)
+    nx.draw(G, pos=positions,node_color='white')
+    nx.draw_networkx_labels(G, pos=positions,labels={n: n+1 for n in G})
+    plt.savefig((str(order)+"temporal.png"), dpi=300)
+    order+=1
+    
+    main=[]
+
+    for j in range(0,max_life):
+        lst1=[]
+        G.remove_edges_from(list(G.edges()))
+        for k in range(0,num):
+            for q in range(0,num):
                 probability = random.uniform(0, 1)
                 if(k!=q):#edges created with random probability
                     if(probability<(1/(num))): #create random edges at diff times
@@ -636,6 +714,7 @@ def temporal(num,max_life,src):
                             if(q,k) in edges_not_used:
                                 edges_not_used.remove((q,k))
                             
+            
         plt.clf()
         main.append(lst1)
         nx.draw(G, pos=positions,node_color='white')
@@ -659,6 +738,7 @@ def temporal(num,max_life,src):
         S.append(new)
 
         
+    #print("S",S)
     null='-'
     
     vertices_traversed=[src]
@@ -690,6 +770,9 @@ def temporal(num,max_life,src):
     
     R= [src]
 
+    #print("R",R)
+    #print("dst",dst)
+
     for l in range(len(S)):
         for each in S[l]:
             a=each[0]
@@ -705,6 +788,11 @@ def temporal(num,max_life,src):
                     arrival_time[a]= l+1
                     R.append(a)
 
+
+    #print("arrival_time",arrival_time)
+    #print("parents",parents)
+    #print("R222",R)
+
     traverse=[] #to add all edges in the order they will be traversed
     for i in range(max_life):
         for each in arrival_time:
@@ -714,6 +802,7 @@ def temporal(num,max_life,src):
     
 
     del traverse[0]
+    #print("traverse",traverse)
     
    
     final=0 #to calculage total time taken
@@ -734,6 +823,7 @@ def temporal(num,max_life,src):
     labels={} #to label nodes, source node also labelled
     for n in G.nodes:
 
+        #print(n)
         if n==src:
             labels[n]= str(n+1) + '$: SOURCE$'
             
@@ -747,19 +837,22 @@ def temporal(num,max_life,src):
     
     b=dict(((u, v), d) for u, v, d in G.edges(data=True))
     nx.draw_networkx_edge_labels(G,pos=positions, edge_labels=b ,font_color='red')
-    name= str(max_life+1)+ "temporal.png"
-    plt.savefig((name), dpi=250)
+    final=str(max_life+1)
+    name_of_final= final+ "temporal.png" 
+
+    plt.savefig((name_of_final), dpi=250)
 
 
 
     return G.edges 
 
-#temporal(no_of_nodes, max_life,source_node)    
-f =temporal(10,15,9)
+#temporal_foremost(no_of_nodes, max_life,source_node)    
+f =temporal_foremost(10,20,1)
 
 #no_of_nodes(n): 1 to 10  
 #max_life: >= 2n and max 20
 #enter source_vertex
+
 
 
 
