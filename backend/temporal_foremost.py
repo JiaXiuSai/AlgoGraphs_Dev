@@ -163,7 +163,7 @@ def temporal_foremost(num,max_life,src):
     final=0 #to calculage total time taken
     if len(R)!= len(vertices):
         print("Path not found, you can try again by increasing max_life")
-        exit()
+
         
     for i in vertices:
         final+= arrival_time[i]
