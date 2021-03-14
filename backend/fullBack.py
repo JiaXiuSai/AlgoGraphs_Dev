@@ -564,14 +564,11 @@ def dijkstra(adjlist,graph,positions,source,target):
       
 
 
-#Foremost journeys in temporal graphs 
-#Quickest path: 
-#Temporal path which traverses all vertices from u at the earliest possible time
-#Generation of edges is random rn
-#Temporal graphs needs to be more populated, more edges and nodes
-#Increase probability so it is more dense
-#Works like Dijkstra’s algorithm, takes in account time steps
 
+import networkx as nx
+import matplotlib.pyplot as plt
+import random
+from itertools import combinations
 
 def temporal(num,max_life,src):
     src=src-1
@@ -582,8 +579,6 @@ def temporal(num,max_life,src):
     vertices=[]
     for i in range(num):
         vertices.append(i)
-    print("vertices",vertices)
-
     
     check= src-1
 
@@ -601,7 +596,7 @@ def temporal(num,max_life,src):
 ##        exit()
         
     edges_not_used= list(combinations((vertices),2)) #getting all possible combinations of length 2
-    print("combinations possible",edges_not_used)
+   # print("combinations possible",edges_not_used)
     plt.clf() #used to clear the current figure
     G= nx.Graph()
     order=0
@@ -617,12 +612,15 @@ def temporal(num,max_life,src):
     order+=1
     
     main=[]
-
-    for j in range(0,max_life,src+1):
+    source=src+1
+    for j in range(0,max_life):
+        #print("j",j)
         lst1=[]
         G.remove_edges_from(list(G.edges()))
         for k in range(0,num):
+            #print("k",k)
             for q in range(0,num):
+                #print("q",q)
                 probability = random.uniform(0, 1)
                 if(k!=q):#edges created with random probability
                     if(probability<(1/(num))): #create random edges at diff times
@@ -638,10 +636,9 @@ def temporal(num,max_life,src):
                             if(q,k) in edges_not_used:
                                 edges_not_used.remove((q,k))
                             
-            
         plt.clf()
         main.append(lst1)
-        nx.draw(G, pos=positions,node_color='pink')
+        nx.draw(G, pos=positions,node_color='white')
         nx.draw_networkx_labels(G, pos=positions,labels={n: n+1 for n in G})
         plt.savefig((str(order)+"temporal.png"), dpi=300)
         order+=1
@@ -662,7 +659,6 @@ def temporal(num,max_life,src):
         S.append(new)
 
         
-    print("S",S)
     null='-'
     
     vertices_traversed=[src]
@@ -686,16 +682,13 @@ def temporal(num,max_life,src):
                 arrival_time[each[1]]= i+1
                 parents[each[1]]= null
         
-    print("arrival_time",arrival_time)
-    print("parents",parents)
+    #print("arrival_time",arrival_time)
+    #print("parents",parents)
 
     #dst here is the vertex that appears latest
     dst=vertices_traversed[-1]
     
     R= [src]
-
-    print("R",R)
-    print("dst",dst)
 
     for l in range(len(S)):
         for each in S[l]:
@@ -712,11 +705,6 @@ def temporal(num,max_life,src):
                     arrival_time[a]= l+1
                     R.append(a)
 
-
-    print("arrival_time",arrival_time)
-    print("parents",parents)
-    print("R222",R)
-
     traverse=[] #to add all edges in the order they will be traversed
     for i in range(max_life):
         for each in arrival_time:
@@ -726,7 +714,6 @@ def temporal(num,max_life,src):
     
 
     del traverse[0]
-    print("traverse",traverse)
     
    
     final=0 #to calculage total time taken
@@ -736,7 +723,7 @@ def temporal(num,max_life,src):
         
     for i in vertices:
         final+= arrival_time[i]
-    print("final",final)
+    #print("final",final)
 
 
     G.remove_edges_from(list(G.edges())) #to label edges with time at which they appear
@@ -747,7 +734,6 @@ def temporal(num,max_life,src):
     labels={} #to label nodes, source node also labelled
     for n in G.nodes:
 
-        print(n)
         if n==src:
             labels[n]= str(n+1) + '$: SOURCE$'
             
@@ -756,22 +742,24 @@ def temporal(num,max_life,src):
             
     plt.clf()#Plotting edges from the list traversed
     main.append(lst1)
-    nx.draw(G, pos=positions,node_color='pink')
+    nx.draw(G, pos=positions,node_color='white')
     nx.draw_networkx_labels(G, pos=positions,labels=labels)
     
     b=dict(((u, v), d) for u, v, d in G.edges(data=True))
-    print(b)
     nx.draw_networkx_edge_labels(G,pos=positions, edge_labels=b ,font_color='red')
-
-    plt.savefig(("final.png"), dpi=250)
+    name= str(max_life+1)+ "temporal.png"
+    plt.savefig((name), dpi=250)
 
 
 
     return G.edges 
 
 #temporal(no_of_nodes, max_life,source_node)    
-#f =temporal(7,10,1)
+f =temporal(10,15,9)
 
 #no_of_nodes(n): 1 to 10  
 #max_life: >= 2n and max 20
 #enter source_vertex
+
+
+
