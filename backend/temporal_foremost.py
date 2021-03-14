@@ -4,7 +4,7 @@ import random
 from itertools import combinations
 
 
-def temporal(num,max_life,src):
+def temporal_foremost(num,max_life,src):
     src=src-1
 ##    if num <1 or num>10:
 ##        print("please ennter number of nodes between 1 and 10")
@@ -201,8 +201,8 @@ def temporal(num,max_life,src):
 
     return G.edges 
 
-#temporal(no_of_nodes, max_life,source_node)    
-f =temporal(10,20,1)
+#temporal_foremost(no_of_nodes, max_life,source_node)    
+f =temporal_foremost(10,20,1)
 
 #no_of_nodes(n): 1 to 10  
 #max_life: >= 2n and max 20
