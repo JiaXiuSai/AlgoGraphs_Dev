@@ -1,6 +1,6 @@
 import networkx as nx
 import matplotlib.pyplot as plt
-
+'''
 def backtrace(parent, start, end):
     path = [end]
     while path[-1] != start:
@@ -66,4 +66,62 @@ nx.draw(G,pos=positions,node_color='orange', width=1, style="solid" )
 nx.draw_networkx_labels(G, pos=positions, font_size=10)
 plt.savefig((str(len(G))+"dijkstra.png"), dpi=300)
 plt.show()
+'''
+#used for dijkstra
+def backtrace(parent, start, end):
+    path = [end]
+    while path[-1] != start:
+        path.append(parent[path[-1]])
+    path.reverse()
+    return path
+
+def dijkstra(adjlist,graph,positions,source,target):
+    source=source-1
+    target=target-1
+    queue = []
+    visited = {}
+    distance = {}
+    shortest_distance = {}
+    parent = {}
+
+    colours=['white']*len(adjlist)
+    for node in range(len(graph)):
+        distance[node] = None
+        visited[node] = False
+        parent[node] = None
+        shortest_distance[node] = float("inf")
+
+    queue.append(source)
+    distance[source] = 0
+    while len(queue) != 0:
+        current = queue.pop(0)
+        visited[current] = True
+        if current == target:
+            shortpath = (backtrace(parent, source, target))
+        for neighbor in graph[current]:
+            if visited[neighbor] == False:
+                distance[neighbor] = distance[current] + 1
+                if distance[neighbor] < shortest_distance[neighbor]:
+                    shortest_distance[neighbor] = distance[neighbor]
+                    parent[neighbor] = current
+                    queue.append(neighbor)
+
+    nx.draw(graph,pos=positions,node_color='white', width=1, style="solid" )
+    try:
+        nx.draw_networkx_labels(graph, pos=positions,labels={n: n+1 for n in graph})
+    except:
+        nx.draw_networkx_labels(graph, pos=positions)
+    order=0
+    plt.savefig((str(order)+"dijkstra.png"), dpi=300)
+    
+    for i in shortpath:
+        colours[i]='orange'
+        order+=1
+        nx.draw(graph, pos=positions,node_color=colours)
+        try:
+            nx.draw_networkx_labels(graph, pos=positions,labels={n: n+1 for n in graph})
+        except:
+            nx.draw_networkx_labels(graph, pos=positions)
+        plt.savefig((str(order)+"dijkstra.png"), dpi=300)
+      
 
