@@ -58,7 +58,7 @@ def temporal(num,max_life,src):
     
     main=[]
 
-    for j in range(0,max_life,src+1):
+    for j in range(0,max_life):
         lst1=[]
         G.remove_edges_from(list(G.edges()))
         for k in range(0,num):
