@@ -4,15 +4,6 @@ import random
 from itertools import combinations
 
 
-#Foremost journeys in temporal graphs 
-#Quickest path: 
-#Temporal path which traverses all vertices from u at the earliest possible time
-#Generation of edges is random rn
-#Temporal graphs needs to be more populated, more edges and nodes
-#Increase probability so it is more dense
-#Works like Dijkstra’s algorithm, takes in account time steps
-
-
 def temporal(num,max_life,src):
     src=src-1
 ##    if num <1 or num>10:
@@ -171,7 +162,7 @@ def temporal(num,max_life,src):
    
     final=0 #to calculage total time taken
     if len(R)!= len(vertices):
-        #print("Path not found, you can try again by increasing max_life")
+        print("Path not found, you can try again by increasing max_life")
         exit()
         
     for i in vertices:
