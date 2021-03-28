@@ -1,7 +1,10 @@
 # [AlgoGraphs](https://algographs.herokuapp.com)
-[Final Product](https://github.com/AlgoGraphs/website)\s\s
-Educational tool for algorithms and graphs.\s\s
-This website is made for software engineering module group project by Group 11.\s\s\s\s
+[Final Product](https://github.com/AlgoGraphs/website)  
+
+Educational tool for algorithms and graphs.  
+
+This website is made for software engineering module group project by Group 11.  
+
 # Currrent features
 ### Graphs
 * Cycle
